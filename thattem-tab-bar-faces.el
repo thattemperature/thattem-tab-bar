@@ -1,7 +1,7 @@
 ;;; Tab-bar-faces --- define faces used in tab bar. ;; -*- lexical-binding: t; -*-
 
 ;;; Commentary:
-;; Tab-bar-faces defines the text face used in Thattem-tab-bat.
+;; Tab-bar-faces defines the text face used in Thattem-tab-bar.
 
 ;;; Code:
 
