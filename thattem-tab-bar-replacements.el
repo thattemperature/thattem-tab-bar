@@ -1,6 +1,7 @@
 ;;; Tab-bar-replacements --- define replacement of items in "tab-bar.el". ;; -*- lexical-binding: t; -*-
 
 ;;; Commentary:
+;; Tab-bar-replacements defines every replacement items of tab bar.
 
 ;;; Code:
 

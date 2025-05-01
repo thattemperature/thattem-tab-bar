@@ -1,6 +1,8 @@
 ;;; Tab-bar-colors --- define colors used in tab bar. ;; -*- lexical-binding: t; -*-
 
 ;;; Commentary:
+;; Tab-bar-colors defines the default colors used in Thattem-tab-bar.
+;; You can customize these colors.
 
 ;;; Code:
 
