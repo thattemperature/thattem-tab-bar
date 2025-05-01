@@ -5,7 +5,6 @@
 
 ;;; Code:
 
-(require 's)
 (require 'nerd-icons)
 (require 'thattem-tab-bar-faces)
 
@@ -83,7 +82,12 @@ Build the string shown in tab bar for No.I TAB."
             (thattem-tab-bar/icon-for-buffer-name
              (alist-get 'name tab) tab)
             (propertize
-             (s-truncate 6 (alist-get 'name tab) " ")
+             (let ((name (alist-get 'name tab)))
+               (if (> (length name) 6)
+                   (format "%s%s"
+                           (substring name 0 5)
+                           (nerd-icons-faicon "nf-fa-ellipsis_v"))
+                 name))
              'face (funcall thattem-tab-bar-tab-face-function tab))
             (mapconcat
              (lambda (buffer)

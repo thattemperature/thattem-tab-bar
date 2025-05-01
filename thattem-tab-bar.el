@@ -12,7 +12,6 @@
 ;;; Code:
 
 ;; Dependencies
-(require 's)
 (require 'nerd-icons)
 
 (defgroup thattem-tab-bar nil
