@@ -62,33 +62,32 @@ Choose face for TAB."
   "Return a nerd icon for the major mode of the BUFFER-NAME buffer.
 Or return a question mark if the buffer does not exists.
 The face is determined by TAB."
-  (if (get-buffer buffer-name)
-      (nerd-icons-icon-for-mode
-       (with-current-buffer buffer-name major-mode)
-       :face
-       (funcall thattem-tab-bar-tab-face-function tab))
-    (nerd-icons-codicon
-     "nf-cod-question"
-     :face
-     (funcall thattem-tab-bar-tab-face-function tab))))
+  (let ((face (funcall thattem-tab-bar-tab-face-function tab)))
+    (if (get-buffer buffer-name)
+        (nerd-icons-icon-for-mode
+         (with-current-buffer buffer-name major-mode)
+         :face face)
+      (nerd-icons-codicon
+       "nf-cod-question"
+       :face face))))
 
 (defun thattem-tab-bar-name-format (tab i)
   "Replacement for \\='tab-bar-tab-name-format-default\\='.
 Build the string shown in tab bar for No.I TAB."
-  (let ((current-p (eq (car tab) 'current-tab)))
+  (let ((current-p (eq (car tab) 'current-tab))
+        (face (funcall thattem-tab-bar-tab-face-function tab)))
     (concat (propertize
              (if tab-bar-tab-hints (format "%d " i) "")
-             'face (funcall thattem-tab-bar-tab-face-function tab))
+             'face face)
             (thattem-tab-bar/icon-for-buffer-name
              (alist-get 'name tab) tab)
-            (propertize
-             (let ((name (alist-get 'name tab)))
-               (if (> (length name) 6)
-                   (format "%s%s"
-                           (substring name 0 5)
-                           (nerd-icons-faicon "nf-fa-ellipsis_v"))
-                 name))
-             'face (funcall thattem-tab-bar-tab-face-function tab))
+            (let ((name (alist-get 'name tab)))
+              (if (> (length name) 6)
+                  (concat
+                   (propertize (substring name 0 5) 'face face)
+                   (nerd-icons-faicon
+                    "nf-fa-ellipsis_v" :face face))
+                (propertize name 'face face)))
             (mapconcat
              (lambda (buffer)
                (thattem-tab-bar/icon-for-buffer-name
@@ -102,9 +101,9 @@ Build the string shown in tab bar for No.I TAB."
                                     (window-state-get)
                                   (alist-get 'ws tab))))))
              (propertize
-              " " 'face (funcall thattem-tab-bar-tab-face-function tab)))
+              " " 'face face))
             (propertize
-             " "'face (funcall thattem-tab-bar-tab-face-function tab))
+             " "'face face)
             (or (and tab-bar-close-button-show
                      (not (eq tab-bar-close-button-show
                               (if current-p 'non-selected 'selected)))
