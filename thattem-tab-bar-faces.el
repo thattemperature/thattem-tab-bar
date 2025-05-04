@@ -25,8 +25,13 @@
 
 (defface thattem-tab-bar/face-1
   `((((class color) (background dark))
-     ;; TODO
-     )
+     :background
+     ,thattem-tab-bar/dark-theme/bright-color
+     :foreground
+     ,thattem-tab-bar/dark-theme/dark-color
+     :height
+     ,thattem-tab-bar/small-font-height
+     :weight bold)
     (((class color) (background light))
      :background
      ,thattem-tab-bar/light-theme/dark-color
@@ -40,8 +45,13 @@
 
 (defface thattem-tab-bar/face-2
   `((((class color) (background dark))
-     ;; TODO
-     )
+     :background
+     ,thattem-tab-bar/dark-theme/dark-color
+     :foreground
+     ,thattem-tab-bar/dark-theme/bright-color
+     :height
+     ,thattem-tab-bar/small-font-height
+     :weight bold)
     (((class color) (background light))
      :background
      ,thattem-tab-bar/light-theme/bright-color
@@ -55,8 +65,12 @@
 
 (defface thattem-tab-bar/big-face-1
   `((((class color) (background dark))
-     ;; TODO
-     )
+     :background
+     ,thattem-tab-bar/dark-theme/bright-color
+     :foreground
+     ,thattem-tab-bar/dark-theme/dark-color
+     :height
+     ,thattem-tab-bar/big-font-height)
     (((class color) (background light))
      :background
      ,thattem-tab-bar/light-theme/dark-color
@@ -69,8 +83,12 @@
 
 (defface thattem-tab-bar/big-face-2
   `((((class color) (background dark))
-     ;; TODO
-     )
+     :background
+     ,thattem-tab-bar/dark-theme/dark-color
+     :foreground
+     ,thattem-tab-bar/dark-theme/bright-color
+     :height
+     ,thattem-tab-bar/big-font-height)
     (((class color) (background light))
      :background
      ,thattem-tab-bar/light-theme/bright-color
@@ -83,8 +101,13 @@
 
 (defface thattem-tab-bar/highlight-face-1
   `((((class color) (background dark))
-     ;; TODO
-     )
+     :background
+     ,thattem-tab-bar/dark-theme/bright-color
+     :foreground
+     ,thattem-tab-bar/dark-theme/dark-highlight-color
+     :height
+     ,thattem-tab-bar/big-font-height
+     :weight bold)
     (((class color) (background light))
      :background
      ,thattem-tab-bar/light-theme/dark-color
@@ -98,8 +121,13 @@
 
 (defface thattem-tab-bar/highlight-face-2
   `((((class color) (background dark))
-     ;; TODO
-     )
+     :background
+     ,thattem-tab-bar/dark-theme/dark-color
+     :foreground
+     ,thattem-tab-bar/dark-theme/bright-highlight-color
+     :height
+     ,thattem-tab-bar/big-font-height
+     :weight bold)
     (((class color) (background light))
      :background
      ,thattem-tab-bar/light-theme/bright-color

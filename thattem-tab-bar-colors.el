@@ -26,6 +26,26 @@
   :type 'string
   :group 'thattem-tab-bar)
 
+(defcustom thattem-tab-bar/dark-theme/bright-color "#784c74"
+  "The default bright color for tab bar in dark theme."
+  :type 'string
+  :group 'thattem-tab-bar)
+
+(defcustom thattem-tab-bar/dark-theme/bright-highlight-color "#d89cb4"
+  "The default highlight bright color for tab bar in dark theme."
+  :type 'string
+  :group 'thattem-tab-bar)
+
+(defcustom thattem-tab-bar/dark-theme/dark-color "#303030"
+  "The default dark color for tab bar in dark theme."
+  :type 'string
+  :group 'thattem-tab-bar)
+
+(defcustom thattem-tab-bar/dark-theme/dark-highlight-color "#000000"
+  "The default highlight dark color for tab bar in dark theme."
+  :type 'string
+  :group 'thattem-tab-bar)
+
 
 (provide 'thattem-tab-bar-colors)
 ;;; thattem-tab-bar-colors.el ends here
