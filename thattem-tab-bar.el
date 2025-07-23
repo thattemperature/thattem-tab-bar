@@ -35,12 +35,17 @@
 
 (require 'thattem-tab-bar-replacements)
 
-(setq tab-bar-format
-      '(thattem-tab-bar-format-history
-        thattem-tab-bar-format-tabs
-        thattem-tab-bar-format-add-tab
-        thattem-tab-bar-format-align-right
-        thattem-tab-bar-format-global))
+(defvar thattem-tab-bar-format-default
+  '(thattem-tab-bar-format-history
+    thattem-tab-bar-format-tabs
+    thattem-tab-bar-format-add-tab
+    thattem-tab-bar-format-align-right
+    thattem-tab-bar-format-global)
+  "New value for \\='tab-bar-format\\='.")
+
+(defun thattem-tab-bar-load ()
+  "Set the \\='tab-bar-format\\='."
+  (setq tab-bar-format thattem-tab-bar-format-default))
 
 (provide 'thattem-tab-bar)
 ;;; thattem-tab-bar.el ends here
