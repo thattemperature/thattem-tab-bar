@@ -47,5 +47,40 @@
   "Set the \\='tab-bar-format\\='."
   (setq tab-bar-format thattem-tab-bar-format-default))
 
+(defun thattem-tab-bar-deal-down-mouse-2 (&optional event)
+  "Dispatch events after the EVENT <down mouse 2>.
+It allows you to switch tab by pressing and scroll mouse wheel."
+  (interactive "e")
+  (let ((go-on t)
+        (shadow nil))
+    (while go-on
+      (let ((next-event (read-event)))
+        (cond ((memq (car-safe next-event)
+                     '(wheel-down
+                       double-wheel-down
+                       triple-wheel-down))
+               (setq shadow t)
+               (tab-next))
+              ((memq (car-safe next-event)
+                     '(wheel-up
+                       double-wheel-up
+                       triple-wheel-up))
+               (setq shadow t)
+               (tab-previous))
+              ((memq (car-safe next-event)
+                     '(mouse-2
+                       double-mouse-2
+                       triple-mouse-2
+                       drag-mouse-2
+                       double-drag-mouse-2
+                       triple-drag-mouse-2))
+               (setq go-on nil)
+               (unless shadow
+                 (add-to-list 'unread-command-events next-event)))
+              (t
+               (setq go-on nil)
+               (add-to-list 'unread-command-events event)
+               (add-to-list 'unread-command-events next-event)))))))
+
 (provide 'thattem-tab-bar)
 ;;; thattem-tab-bar.el ends here
