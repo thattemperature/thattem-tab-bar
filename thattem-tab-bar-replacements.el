@@ -25,6 +25,10 @@
 (require 'nerd-icons)
 (require 'thattem-tab-bar-faces)
 
+(defvar thattem-tab-bar-not-eval-item-list nil
+  "Some tab bar items that do not show anything in the tab bar.
+They just have side-effects, so do not eval them in other items.")
+
 ;;; History items
 
 (defvar thattem-tab-bar-back-button
@@ -109,14 +113,14 @@ Build the string shown in tab bar for No.I TAB."
              (lambda (buffer)
                (thattem-tab-bar/icon-for-buffer-name
                 buffer tab))
-             (cdr(delete-dups (cons
-                               (if current-p
-                                   (current-buffer)
-                                 (alist-get 'name tab))
-                               (window-state-buffers
+             (cdr (delete-dups (cons
                                 (if current-p
-                                    (window-state-get)
-                                  (alist-get 'ws tab))))))
+                                    (current-buffer)
+                                  (alist-get 'name tab))
+                                (window-state-buffers
+                                 (if current-p
+                                     (window-state-get)
+                                   (alist-get 'ws tab))))))
              (propertize
               " " 'face face))
             (propertize
@@ -193,11 +197,15 @@ Format TAB using its index I."
 
 (defun thattem-tab-bar-format-align-right ()
   "Replacement for \\='tab-bar-format-align-right\\='."
-  (let* ((rest (cdr (memq 'thattem-tab-bar-format-align-right tab-bar-format)))
+  (let* ((rest (cdr (memq 'thattem-tab-bar-format-align-right
+                          tab-bar-format)))
+         (rest (cl-set-difference
+                rest thattem-tab-bar-not-eval-item-list))
          (rest (tab-bar-format-list rest))
          (rest (mapconcat (lambda (item) (nth 2 item)) rest ""))
          (hpos (progn
-                 (add-face-text-property 0 (length rest) 'tab-bar t rest)
+                 (add-face-text-property
+                  0 (length rest) 'tab-bar t rest)
                  (string-pixel-width rest)))
          (str (propertize " " 'display
                           (if (window-system)

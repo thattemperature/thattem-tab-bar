@@ -33,54 +33,43 @@
   "Modified tab bar."
   :group 'convenience)
 
-(require 'thattem-tab-bar-replacements)
+(require 'thattem-tab-bar-advices)
 
 (defvar thattem-tab-bar-format-default
-  '(thattem-tab-bar-format-history
+  '(thattem-tab-bar-format-workspaces--before-helpler
+    thattem-tab-bar-format-workspaces
+    thattem-tab-bar-format-workspaces--after-helper
+    thattem-tab-bar-format-history
     thattem-tab-bar-format-tabs
     thattem-tab-bar-format-add-tab
     thattem-tab-bar-format-align-right
     thattem-tab-bar-format-global)
   "New value for \\='tab-bar-format\\='.")
 
-(defun thattem-tab-bar-load ()
-  "Set the \\='tab-bar-format\\='."
-  (setq tab-bar-format thattem-tab-bar-format-default))
+(defvar thattem-tab-bar-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [tab-bar wheel-up]
+                #'thattem-tab-bar-deal-mouse-wheel-up)
+    (define-key map [tab-bar wheel-down]
+                #'thattem-tab-bar-deal-mouse-wheel-down)
+    (define-key map [down-mouse-2]
+                #'thattem-tab-bar-deal-down-mouse-2)
+    map)
+  "Keymap used by \\='thattem-tab-bar-mode\\='.")
 
-(defun thattem-tab-bar-deal-down-mouse-2 (&optional event)
-  "Dispatch events after the EVENT <down mouse 2>.
-It allows you to switch tab by pressing and scroll mouse wheel."
-  (interactive "e")
-  (let ((go-on t)
-        (shadow nil))
-    (while go-on
-      (let ((next-event (read-event)))
-        (cond ((memq (car-safe next-event)
-                     '(wheel-down
-                       double-wheel-down
-                       triple-wheel-down))
-               (setq shadow t)
-               (tab-next))
-              ((memq (car-safe next-event)
-                     '(wheel-up
-                       double-wheel-up
-                       triple-wheel-up))
-               (setq shadow t)
-               (tab-previous))
-              ((memq (car-safe next-event)
-                     '(mouse-2
-                       double-mouse-2
-                       triple-mouse-2
-                       drag-mouse-2
-                       double-drag-mouse-2
-                       triple-drag-mouse-2))
-               (setq go-on nil)
-               (unless shadow
-                 (add-to-list 'unread-command-events next-event)))
-              (t
-               (setq go-on nil)
-               (add-to-list 'unread-command-events event)
-               (add-to-list 'unread-command-events next-event)))))))
+(define-minor-mode thattem-tab-bar-mode
+  "Toggle thattem tab bar mode."
+  :global t
+
+  (when thattem-tab-bar-mode
+    (setq tab-bar-format thattem-tab-bar-format-default))
+  (when thattem-tab-bar-mode
+    (advice-add 'tab-bar-mouse-1 :around
+                #'thattem-tab-bar--advice-around--tab-bar-mouse-1))
+  (unless thattem-tab-bar-mode
+    (advice-remove 'tab-bar-mouse-1
+                   #'thattem-tab-bar--advice-around--tab-bar-mouse-1)))
+
 
 (provide 'thattem-tab-bar)
 ;;; thattem-tab-bar.el ends here
