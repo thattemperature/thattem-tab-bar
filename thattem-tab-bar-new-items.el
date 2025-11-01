@@ -45,15 +45,17 @@
 
 (defun thattem-tab-bar-switch-workspace (id)
   "Switch to workspace with ID."
-  (shell-command-to-string
-   (concat thattem-tab-bar-wmctrl-executable " -s " id)))
+  (ignore-errors
+    (shell-command-to-string
+     (concat thattem-tab-bar-wmctrl-executable " -s " id))))
 
 (defun thattem-tab-bar-get-workspace-list ()
   "Get the list of workspace by `wmctrl` shell command."
-  (split-string
-   (shell-command-to-string
-    (concat thattem-tab-bar-wmctrl-executable " -d"))
-   "[\n\r]+" t))
+  (ignore-errors
+    (split-string
+     (shell-command-to-string
+      (concat thattem-tab-bar-wmctrl-executable " -d"))
+     "[\n\r]+" t)))
 
 (defun thattem-tab-bar-get-workspace-id (workspace)
   "Get the id of the WORKSPACE."
@@ -95,14 +97,20 @@ parameter."
          (current-workspace (cl-find-if
                              #'thattem-tab-bar-current-workspace-p
                              workspace-list))
-         (specialized-current-id (+ (string-to-number
+         (specialized-current-id (when current-workspace
+                                   (+
+                                    (string-to-number
                                      (thattem-tab-bar-get-workspace-id
                                       current-workspace))
-                                    list-length))
-         (previous-id (number-to-string
-                       (% (1- specialized-current-id) list-length)))
-         (next-id (number-to-string
-                   (% (1+ specialized-current-id) list-length))))
+                                    list-length)))
+         (previous-id (when current-workspace
+                        (number-to-string
+                         (% (1- specialized-current-id)
+                            list-length))))
+         (next-id (when current-workspace
+                    (number-to-string
+                     (% (1+ specialized-current-id)
+                        list-length)))))
     (set-frame-parameter nil 'workspace-list workspace-list)
     (set-frame-parameter nil 'previous-workspace-id previous-id)
     (set-frame-parameter nil 'next-workspace-id next-id)))
@@ -117,7 +125,8 @@ parameter."
         (mapcan
          #'thattem-tab-bar--format-workspace
          workspace-list)
-      "Cannot get workspace information!")))
+      (propertize "Cannot get workspace information!"
+                  'face 'thattem-tab-bar/highlight-face-2))))
 
 ;; Since mouse wheel event on tab bar cannot get the `posn-string`,
 ;; we cannot use text property to judge whether scroll workspace or
