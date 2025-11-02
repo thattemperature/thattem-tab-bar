@@ -26,18 +26,6 @@
 
 ;;; Workspace control
 
-(defvar thattem-tab-bar-current-workspace-icon
-  (nerd-icons-octicon "nf-oct-dot_fill"
-                      :face 'thattem-tab-bar/big-face-2
-                      :v-adjust 0)
-  "Icon of current workspace shows in the thattem-tab-bar.")
-
-(defvar thattem-tab-bar-workspace-icon
-  (nerd-icons-octicon "nf-oct-dot"
-                      :face 'thattem-tab-bar/big-face-2
-                      :v-adjust 0)
-  "Icon of common workspace shows in the thattem-tab-bar.")
-
 (defcustom thattem-tab-bar-wmctrl-executable "wmctrl"
   "The wmctrl executable on your system to be used by thattem-tab-bar."
   :type 'string
@@ -68,26 +56,39 @@ WORKSPACE should be a line of `wmctrl -d` command."
 
 (defun thattem-tab-bar--format-workspace (workspace)
   "Format WORKSPACE and return the result as a keymap."
-  (let ((current-p (thattem-tab-bar-current-workspace-p workspace)))
+  (let ((current-p (thattem-tab-bar-current-workspace-p workspace))
+        (id (thattem-tab-bar-get-workspace-id workspace))
+        (space (propertize " " 'face 'thattem-tab-bar/face-2)))
     (cond
      (current-p
       `((current-workspace
          menu-item
          ,(propertize
-           thattem-tab-bar-current-workspace-icon
+           (concat
+            space
+            (nerd-icons-mdicon
+             (format "nf-md-numeric_%d_circle"
+                     (1+ (% (string-to-number id) 10)))
+             :face 'thattem-tab-bar/big-face-2)
+            space)
            'type 'workspace)
          ignore
          :help "Current workspace")))
      (t
-      (let ((id (thattem-tab-bar-get-workspace-id workspace)))
-        `((,(intern (format "workspace-%s" id))
-           menu-item
-           ,(propertize
-             thattem-tab-bar-workspace-icon
-             'type 'workspace
-             'id id)
-           ignore
-           :help "Click to change workspace")))))))
+      `((,(intern (format "workspace-%s" id))
+         menu-item
+         ,(propertize
+           (concat
+            space
+            (nerd-icons-mdicon
+             (format "nf-md-numeric_%d_circle_outline"
+                     (1+ (% (string-to-number id) 10)))
+             :face 'thattem-tab-bar/big-face-2)
+            space)
+           'type 'workspace
+           'id id)
+         ignore
+         :help "Click to change workspace"))))))
 
 (defun thattem-tab-bar-format-workspaces--before-helpler ()
   "A helpler function to get workspace information and save as frame \

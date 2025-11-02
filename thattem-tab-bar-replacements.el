@@ -33,14 +33,12 @@ They just have side-effects, so do not eval them in other items.")
 
 (defvar thattem-tab-bar-back-button
   (nerd-icons-faicon "nf-fa-caret_left"
-                     :face 'thattem-tab-bar/big-face-2
-                     :v-adjust 0)
+                     :face 'thattem-tab-bar/big-face-2)
   "Replacement for \\='tab-bar-back-button\\='.")
 
 (defvar thattem-tab-bar-forward-button
   (nerd-icons-faicon "nf-fa-caret_right"
-                     :face 'thattem-tab-bar/big-face-2
-                     :v-adjust 0)
+                     :face 'thattem-tab-bar/big-face-2)
   "Replacement for \\='tab-bar-forward-button\\='.")
 
 (defun thattem-tab-bar-format-history ()
