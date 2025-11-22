@@ -33,17 +33,19 @@
 
 (defun thattem-tab-bar-switch-workspace (id)
   "Switch to workspace with ID."
-  (ignore-errors
-    (shell-command-to-string
-     (concat thattem-tab-bar-wmctrl-executable " -s " id))))
+  (let ((default-directory "~/"))
+    (ignore-errors
+      (shell-command-to-string
+       (concat thattem-tab-bar-wmctrl-executable " -s " id)))))
 
 (defun thattem-tab-bar-get-workspace-list ()
   "Get the list of workspace by `wmctrl` shell command."
-  (ignore-errors
-    (split-string
-     (shell-command-to-string
-      (concat thattem-tab-bar-wmctrl-executable " -d"))
-     "[\n\r]+" t)))
+  (let ((default-directory "~/"))
+    (ignore-errors
+      (split-string
+       (shell-command-to-string
+        (concat thattem-tab-bar-wmctrl-executable " -d"))
+       "[\n\r]+" t))))
 
 (defun thattem-tab-bar-get-workspace-id (workspace)
   "Get the id of the WORKSPACE."
