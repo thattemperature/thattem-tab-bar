@@ -1,0 +1,228 @@
+#+TITLE: thattem‑tab‑bar
+#+AUTHOR: That Temperature
+#+EMAIL: 2719023332@qq.com
+#+LANGUAGE: en
+#+OPTIONS: toc:nil author:nil ^:nil
+#+HTML: <a href=\"https://www.gnu.org/licenses/gpl-3.0\"><img src=\"https://img.shields.io/badge/license-GPL%20v3-blue.svg\" alt=\"License: GPL v3\"></a>
+#+HTML: <a href=\"https://www.gnu.org/software/emacs/\"><img src=\"https://img.shields.io/badge/Emacs-%3E%3D30.1-%237F5AB6\" alt=\"Emacs ≥ 30.1\"></a>
+#+HTML: <a href=\"https://github.com/thattemperature/thattem-tab-bar\"><img src=\"https://img.shields.io/badge/GitHub-thattem--tab--bar-181717\" alt=\"GitHub\"></a>
+
+* 🌈 A Beautiful, Icon‑Driven Tab Bar for Emacs
+
+*thattem‑tab‑bar* replaces Emacs’s default tab‑bar with a visually
+rich, icon‑based interface that respects light and dark themes, offers
+per‑tab color‑coding, and integrates workspace switching (via
+~wmctrl~).
+
+It is built on top of Emacs’s built‑in ~tab‑bar‑mode~ and replaces
+each standard item (tabs, history buttons, new‑tab button,
+align‑right, global info) with a version that uses **nerd‑icons** and
+custom faces.
+
+* ✨ Features
+
+- **Icons everywhere** – tabs, history arrows, close button, new‑tab
+  button, and workspace indicators are all drawn with nerd‑icons.
+- **Theme‑aware colors** – separate color sets for light and dark
+  themes; everything is customizable.
+- **Workspace integration** – show desktop workspaces (virtual
+  desktops) as a row of numbered circles; click or scroll the mouse
+  wheel to switch.  (Requires ~wmctrl~ and a compatible window
+  manager.)
+- **Rich tab display** – each tab shows:
+  - an icon for the buffer’s major‑mode,
+  - the buffer name (shortened if too long),
+  - icons for every other buffer displayed in the same window‑state.
+- **Mouse‑wheel support** – scroll over the tab bar to cycle through
+  tabs or workspaces; press and hold middle‑button + scroll to switch
+  tabs quickly.
+- **Customizable faces** – six different faces (normal, big,
+  highlighted) let you fine‑tune the appearance of every part of the
+  bar.
+- **Non‑invasive** – does *not* replace the underlying tab‑bar
+  machinery; only provides drop‑in replacements for the display items.
+
+* 📦 Requirements
+
+- Emacs ≥ 30.1
+- [[https://github.com/rainstormstudio/nerd-icons.el][nerd‑icons]] package
+- (Optional) ~wmctrl~ command‑line tool for workspace support
+
+* 🔧 Installation
+
+** Manual Installation
+
+Clone the repository:
+
+#+begin_src sh
+  git clone https://github.com/thattemperature/thattem-tab-bar.git
+#+end_src
+
+Add to your ~load-path~ and require the package:
+
+#+begin_src elisp
+  (add-to-list 'load-path "/path/to/thattem-tab-bar")
+  (require 'thattem-tab-bar)
+#+end_src
+
+Then enable the global minor mode:
+
+#+begin_src elisp
+  (thattem-tab-bar-mode 1)
+#+end_src
+
+** Using ~straight.el~ or ~quelpa~
+
+If you use a package manager that supports Git sources, you can
+install directly from the repository.
+
+Example with ~straight.el~:
+
+#+begin_src elisp
+  (straight-use-package '(thattem-tab-bar
+                          :type git
+                          :host github
+                          :repo "thattemperature/thattem-tab-bar"))
+  (thattem-tab-bar-mode 1)
+#+end_src
+
+* 🎨 Customization
+
+All customizable options are under the ~thattem‑tab‑bar~ group.  To
+change them, use ~M‑x customize‑group RET thattem‑tab‑bar RET~ or set
+them in your init file.
+
+** Colors
+
+The package defines eight color variables – four for light themes,
+four for dark themes – that control the background and foreground of
+normal and highlighted parts.
+
+- ~thattem‑tab‑bar/light‑theme/bright‑color~
+- ~thattem‑tab‑bar/light‑theme/bright‑highlight‑color~
+- ~thattem‑tab‑bar/light‑theme/dark‑color~
+- ~thattem‑tab‑bar/light‑theme/dark‑highlight‑color~
+- … and their dark‑theme counterparts.
+
+** Faces
+
+Six faces are defined; you can inspect them with ~M‑x describe‑face~
+or override them in your theme.
+
+- ~thattem‑tab‑bar/face‑1~, ~face‑2~ – used for “small” text (history
+  arrows, align‑right spacer, etc.)
+- ~thattem‑tab‑bar/big‑face‑1~, ~big‑face‑2~ – used for “big” text
+  (tab names, workspace numbers)
+- ~thattem‑tab‑bar/highlight‑face‑1~, ~highlight‑face‑2~ – used for
+  highlighted items (current tab, current workspace)
+
+** Font heights
+
+- ~thattem‑tab‑bar/small‑font‑height~ (default 160)
+- ~thattem‑tab‑bar/big‑font‑height~ (default 300)
+
+** Workspace integration
+
+If you have ~wmctrl~ installed, the tab bar will show a row of
+numbered circles representing your virtual desktops.  The current
+workspace is filled, others are outlines.
+
+- Click a circle to switch to that workspace.
+- Scroll the mouse wheel over the workspace area to move to the
+  previous/next workspace.
+- The executable path can be changed via
+  ~thattem‑tab‑bar‑wmctrl‑executable~ (defaults to ~"wmctrl"~).
+
+If ~wmctrl~ is not available, the workspace area will show an error
+message (styled with the highlight face).).
+
+* 🖱️ Mouse & Key Bindings
+
+The package adds several mouse‑related improvements:
+
+- **Left‑click** on a workspace circle switches to that workspace.
+- **Mouse wheel** over the workspace area switches workspaces; over
+  the tab area it switches tabs.
+- **Middle‑button press + wheel** (hold middle button, then scroll)
+  lets you quickly cycle through tabs without moving the mouse.
+
+  The following key bindings are installed in
+  ~thattem‑tab‑bar‑mode‑map~:
+
+  | Key sequence           | Action                            |
+  |------------------------+-----------------------------------|
+  | ~[tab‑bar wheel‑up]~   | previous workspace / previous tab |
+  | ~[tab‑bar wheel‑down]~ | next workspace / next tab         |
+  | ~[down‑mouse‑2]~       | start middle‑button + scroll mode |
+
+* ❓ Frequently Asked Questions
+
+** Q: Does this work with ~tab‑bar‑mode~ disabled?
+No. This package enhances the standard tab‑bar; you must have
+~(tab‑bar‑mode 1)~ as well.
+
+** Q: Can I use it without nerd‑icons?
+No. Icons are central to the design.  You can install nerd‑icons from
+MELPA.
+
+** Q: Why are the workspace numbers sometimes wrong?
+Workspace detection relies on ~wmctrl -d~.  If your window manager
+does not support the EWMH desktop specification, the list may be empty
+or incorrect.
+
+** Q: How do I change the order of items in the tab bar?
+Customize ~tab‑bar‑format~ after enabling ~thattem‑tab‑bar‑mode~.  The
+mode only sets the variable once; later changes are preserved.
+
+** Q: The tab bar looks too tall / too short.
+Adjust ~thattem‑tab‑bar/small‑font‑height~ and
+~thattem‑tab‑bar/big‑font‑height~.
+
+* 🤝 Contributing
+
+Bug reports, feature suggestions, and pull requests are welcome on
+GitHub: https://github.com/thattemperature/thattem-tab-bar.
+
+Please ensure that any changes are consistent with the existing code
+style (lexical‑binding, no unnecessary dependencies, thorough
+commentary).
+
+** Development
+
+The package is split into several files, each responsible for a
+different aspect:
+
+| File                              | Purpose                                 |
+|-----------------------------------+-----------------------------------------|
+| ~thattem‑tab‑bar.el~              | Main entry point, minor‑mode definition |
+| ~thattem‑tab‑bar‑replacements.el~ | Replacement items for ~tab‑bar‑format~  |
+| ~thattem‑tab‑bar‑faces.el~        | Face definitions                        |
+| ~thattem‑tab‑bar‑colors.el~       | Customizable color variables            |
+| ~thattem‑tab‑bar‑advices.el~      | Advice functions for mouse events       |
+| ~thattem‑tab‑bar‑new‑items.el~    | Workspace‑related items                 |
+
+The replacement items follow the same naming pattern as the built‑in
+ones (e.g., ~thattem‑tab‑bar‑format‑tabs~,
+~thattem‑tab‑bar‑format‑history~) and are designed to be drop‑in
+replacements.
+
+If you want to build your own tab‑bar format, you can mix the provided
+items with the original ones.
+
+* 📄 License
+
+*thattem‑tab‑bar* is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+See the file [[file:COPYING][COPYING]] for the full license text.
+
+* 📣 Acknowledgments
+
+- [[https://github.com/rainstormstudio/nerd-icons.el][nerd‑icons]] for the beautiful icon set.
+- The Emacs development team for the robust ~tab‑bar‑mode~
+  infrastructure.
+- All contributors and users who test and improve the package.
+
+  Enjoy your shiny new tab bar! 🎉
