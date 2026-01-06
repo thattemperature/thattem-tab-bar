@@ -35,7 +35,7 @@
 
 (require 'thattem-tab-bar-advices)
 
-(defvar thattem-tab-bar-format-default
+(defcustom thattem-tab-bar-format-default
   '(thattem-tab-bar-format-workspaces--before-helpler
     thattem-tab-bar-format-workspaces
     thattem-tab-bar-format-workspaces--after-helper
@@ -44,7 +44,9 @@
     thattem-tab-bar-format-add-tab
     thattem-tab-bar-format-align-right
     thattem-tab-bar-format-global)
-  "New value for \\='tab-bar-format\\='.")
+  "New value for \\='tab-bar-format\\='."
+  :type '(repeat symbol)
+  :group 'thattem-tab-bar)
 
 (defvar thattem-tab-bar-mode-map
   (let ((map (make-sparse-keymap)))
