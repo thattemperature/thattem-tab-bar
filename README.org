@@ -9,7 +9,7 @@
 :END:
 
 #+attr_html: :width 512px :align center
-[[file:asserts/logo.svg]]
+[[file:assets/logo.svg]]
 
 * 🌈 A Beautiful, Icon-Driven Tab Bar for Emacs
 
