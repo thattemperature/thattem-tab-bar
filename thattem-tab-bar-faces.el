@@ -27,15 +27,15 @@
 ;;; Define font height
 
 (defcustom thattem-tab-bar/small-font-height
-  160
-  "Font height of small part in tab bar."
-  :type 'integer
+  0.8
+  "The height factor of small part in tab bar."
+  :type 'float
   :group 'thattem-tab-bar)
 
 (defcustom thattem-tab-bar/big-font-height
-  300
-  "Font height of big part in tab bar."
-  :type 'integer
+  1.5
+  "The height factor of big part in tab bar."
+  :type 'float
   :group 'thattem-tab-bar)
 
 ;;; Define faces
