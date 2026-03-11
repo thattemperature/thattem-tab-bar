@@ -33,12 +33,14 @@ They just have side-effects, so do not eval them in other items.")
 
 (defvar thattem-tab-bar-back-button
   (nerd-icons-faicon "nf-fa-caret_left"
-                     :face 'thattem-tab-bar/big-face-2)
+                     :face `(thattem-tab-bar/face-2
+                             (:height ,thattem-tab-bar-big-font-height)))
   "Replacement for \\='tab-bar-back-button\\='.")
 
 (defvar thattem-tab-bar-forward-button
   (nerd-icons-faicon "nf-fa-caret_right"
-                     :face 'thattem-tab-bar/big-face-2)
+                     :face `(thattem-tab-bar/face-2
+                             (:height ,thattem-tab-bar-big-font-height)))
   "Replacement for \\='tab-bar-forward-button\\='.")
 
 (defun thattem-tab-bar-format-history ()
@@ -59,8 +61,10 @@ They just have side-effects, so do not eval them in other items.")
   "Replacement for \\='tab-bar-tab-face-default\\='.
 Choose face for TAB."
   (if (eq (car tab) 'current-tab)
-      'thattem-tab-bar/highlight-face-1
-    'thattem-tab-bar/face-1))
+      `(thattem-tab-bar/highlight-face-1
+        (:height ,thattem-tab-bar-big-font-height))
+    `(thattem-tab-bar/face-1
+      (:height ,thattem-tab-bar-small-font-height))))
 
 (defcustom thattem-tab-bar-tab-face-function
   #'thattem-tab-bar-tab-face
@@ -71,7 +75,8 @@ Choose face for TAB."
 (defvar thattem-tab-bar-close-button
   (propertize
    (nerd-icons-codicon "nf-cod-close"
-                       :face 'thattem-tab-bar/face-1)
+                       :face `(thattem-tab-bar/face-1
+                               (:height ,thattem-tab-bar-small-font-height)))
    'close-tab t
    'help-echo "Click to close tab")
   "Replacement for \\='tab-bar-close-button\\='.")
@@ -142,7 +147,8 @@ Format TAB using its index I."
    `((,(intern (format "left-sep-%i" i))
       menu-item
       ,(nerd-icons-powerline "nf-pl-left_hard_divider"
-                             :face 'thattem-tab-bar/big-face-1)
+                             :face `(thattem-tab-bar/face-1
+                                     (:height ,thattem-tab-bar-big-font-height)))
       ignore :help ""))
    (cond
     ((eq (car tab) 'current-tab)
@@ -160,7 +166,8 @@ Format TAB using its index I."
    `((,(intern (format "right-sep-%i" i))
       menu-item
       ,(nerd-icons-powerline "nf-pl-left_hard_divider"
-                             :face 'thattem-tab-bar/big-face-2)
+                             :face `(thattem-tab-bar/face-2
+                                     (:height ,thattem-tab-bar-big-font-height)))
       ignore :help ""))
    (when (alist-get 'close-binding tab)
      `((,(if (eq (car tab) 'current-tab)
@@ -182,7 +189,8 @@ Format TAB using its index I."
 
 (defvar thattem-tab-bar-new-button
   (nerd-icons-codicon "nf-cod-add"
-                      :face 'thattem-tab-bar/highlight-face-2)
+                      :face `(thattem-tab-bar/highlight-face-2
+                              (:height ,thattem-tab-bar-big-font-height)))
   "Replacement for \\='tab-bar-new-button\\='.")
 
 (defun thattem-tab-bar-format-add-tab ()
@@ -210,7 +218,7 @@ Format TAB using its index I."
                               `(space :align-to (- right (,hpos)))
                             `(space :align-to (,(- (frame-inner-width)
                                                    hpos))))
-                          'face 'thattem-tab-bar/face-2)))
+                          'face `(thattem-tab-bar/face-2))))
     `((align-right menu-item ,str ignore))))
 
 ;;; Global information
@@ -218,7 +226,8 @@ Format TAB using its index I."
   "Replacement for \\='tab-bar-format-global\\='."
   `((global menu-item
             ,(format-mode-line global-mode-string
-                               'thattem-tab-bar/highlight-face-2)
+                               `(thattem-tab-bar/highlight-face-2
+                                 (:height ,thattem-tab-bar-big-font-height)))
             ignore)))
 
 

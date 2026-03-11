@@ -60,7 +60,8 @@ WORKSPACE should be a line of `wmctrl -d` command."
   "Format WORKSPACE and return the result as a keymap."
   (let ((current-p (thattem-tab-bar-current-workspace-p workspace))
         (id (thattem-tab-bar-get-workspace-id workspace))
-        (space (propertize " " 'face 'thattem-tab-bar/face-2)))
+        (space (propertize " " 'face `(thattem-tab-bar/face-2
+                                       (:height ,thattem-tab-bar-small-font-height)))))
     (cond
      (current-p
       `((current-workspace
@@ -71,7 +72,8 @@ WORKSPACE should be a line of `wmctrl -d` command."
             (nerd-icons-mdicon
              (format "nf-md-numeric_%d_circle"
                      (1+ (% (string-to-number id) 10)))
-             :face 'thattem-tab-bar/big-face-2)
+             :face `(thattem-tab-bar/face-2
+                     (:height ,thattem-tab-bar-big-font-height)))
             space)
            'type 'workspace)
          ignore
@@ -85,7 +87,8 @@ WORKSPACE should be a line of `wmctrl -d` command."
             (nerd-icons-mdicon
              (format "nf-md-numeric_%d_circle_outline"
                      (1+ (% (string-to-number id) 10)))
-             :face 'thattem-tab-bar/big-face-2)
+             :face `(thattem-tab-bar/face-2
+                     (:height ,thattem-tab-bar-big-font-height)))
             space)
            'type 'workspace
            'id id)
@@ -129,7 +132,8 @@ parameter."
          #'thattem-tab-bar--format-workspace
          workspace-list)
       (propertize "Cannot get workspace information!"
-                  'face 'thattem-tab-bar/highlight-face-2))))
+                  'face `(thattem-tab-bar/highlight-face-2
+                          (:height ,thattem-tab-bar-big-font-height))))))
 
 ;; Since mouse wheel event on tab bar cannot get the `posn-string`,
 ;; we cannot use text property to judge whether scroll workspace or

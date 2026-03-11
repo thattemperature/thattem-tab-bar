@@ -22,17 +22,15 @@
 
 ;;; Code:
 
-(require 'thattem-tab-bar-colors)
-
 ;;; Define font height
 
-(defcustom thattem-tab-bar/small-font-height
+(defcustom thattem-tab-bar-small-font-height
   0.8
   "The height factor of small part in tab bar."
   :type 'float
   :group 'thattem-tab-bar)
 
-(defcustom thattem-tab-bar/big-font-height
+(defcustom thattem-tab-bar-big-font-height
   1.5
   "The height factor of big part in tab bar."
   :type 'float
@@ -41,119 +39,19 @@
 ;;; Define faces
 
 (defface thattem-tab-bar/face-1
-  `((((class color) (background dark))
-     :background
-     ,thattem-tab-bar/dark-theme/bright-color
-     :foreground
-     ,thattem-tab-bar/dark-theme/dark-color
-     :height
-     ,thattem-tab-bar/small-font-height
-     :weight bold)
-    (((class color) (background light))
-     :background
-     ,thattem-tab-bar/light-theme/dark-color
-     :foreground
-     ,thattem-tab-bar/light-theme/bright-color
-     :height
-     ,thattem-tab-bar/small-font-height
-     :weight bold)
-    (t :inverse-video t))
+  nil
   "First face for tab bar.")
 
 (defface thattem-tab-bar/face-2
-  `((((class color) (background dark))
-     :background
-     ,thattem-tab-bar/dark-theme/dark-color
-     :foreground
-     ,thattem-tab-bar/dark-theme/bright-color
-     :height
-     ,thattem-tab-bar/small-font-height
-     :weight bold)
-    (((class color) (background light))
-     :background
-     ,thattem-tab-bar/light-theme/bright-color
-     :foreground
-     ,thattem-tab-bar/light-theme/dark-color
-     :height
-     ,thattem-tab-bar/small-font-height
-     :weight bold)
-    (t :inverse-video t))
+  nil
   "Second face for tab bar.")
 
-(defface thattem-tab-bar/big-face-1
-  `((((class color) (background dark))
-     :background
-     ,thattem-tab-bar/dark-theme/bright-color
-     :foreground
-     ,thattem-tab-bar/dark-theme/dark-color
-     :height
-     ,thattem-tab-bar/big-font-height)
-    (((class color) (background light))
-     :background
-     ,thattem-tab-bar/light-theme/dark-color
-     :foreground
-     ,thattem-tab-bar/light-theme/bright-color
-     :height
-     ,thattem-tab-bar/big-font-height)
-    (t :inverse-video t))
-  "First face for tab bar big part.")
-
-(defface thattem-tab-bar/big-face-2
-  `((((class color) (background dark))
-     :background
-     ,thattem-tab-bar/dark-theme/dark-color
-     :foreground
-     ,thattem-tab-bar/dark-theme/bright-color
-     :height
-     ,thattem-tab-bar/big-font-height)
-    (((class color) (background light))
-     :background
-     ,thattem-tab-bar/light-theme/bright-color
-     :foreground
-     ,thattem-tab-bar/light-theme/dark-color
-     :height
-     ,thattem-tab-bar/big-font-height)
-    (t :inverse-video t))
-  "Second face for tab bar big part.")
-
 (defface thattem-tab-bar/highlight-face-1
-  `((((class color) (background dark))
-     :background
-     ,thattem-tab-bar/dark-theme/bright-color
-     :foreground
-     ,thattem-tab-bar/dark-theme/dark-highlight-color
-     :height
-     ,thattem-tab-bar/big-font-height
-     :weight bold)
-    (((class color) (background light))
-     :background
-     ,thattem-tab-bar/light-theme/dark-color
-     :foreground
-     ,thattem-tab-bar/light-theme/bright-highlight-color
-     :height
-     ,thattem-tab-bar/big-font-height
-     :weight bold)
-    (t :inverse-video t))
+  nil
   "First face for highlighted part on tab bar.")
 
 (defface thattem-tab-bar/highlight-face-2
-  `((((class color) (background dark))
-     :background
-     ,thattem-tab-bar/dark-theme/dark-color
-     :foreground
-     ,thattem-tab-bar/dark-theme/bright-highlight-color
-     :height
-     ,thattem-tab-bar/big-font-height
-     :weight bold)
-    (((class color) (background light))
-     :background
-     ,thattem-tab-bar/light-theme/bright-color
-     :foreground
-     ,thattem-tab-bar/light-theme/dark-highlight-color
-     :height
-     ,thattem-tab-bar/big-font-height
-     :weight bold)
-    (t :inverse-video t))
+  nil
   "Second face for highlighted part on tab bar.")
 
 
