@@ -1,7 +1,7 @@
 ;;; Thattem-tab-bar --- a simple tab bar  -*- lexical-binding: t; -*-
 
 ;; Author: That Temperature <2719023332@qq.com>
-;; Package-Requires: (nerd-icons)
+;; Package-Requires: ((nerd-icons "0.1.0"))
 ;; URL: https://github.com/thattemperature/thattem-tab-bar
 
 ;; This program is free software: you can redistribute it and/or modify
