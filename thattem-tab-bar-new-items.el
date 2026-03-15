@@ -33,19 +33,13 @@
 
 (defun thattem-tab-bar-switch-workspace (id)
   "Switch to workspace with ID."
-  (let ((default-directory "~/"))
-    (ignore-errors
-      (shell-command-to-string
-       (concat thattem-tab-bar-wmctrl-executable " -s " id)))))
+  (ignore-errors
+    (process-lines thattem-tab-bar-wmctrl-executable "-s" id)))
 
 (defun thattem-tab-bar-get-workspace-list ()
   "Get the list of workspace by `wmctrl` shell command."
-  (let ((default-directory "~/"))
-    (ignore-errors
-      (split-string
-       (shell-command-to-string
-        (concat thattem-tab-bar-wmctrl-executable " -d"))
-       "[\n\r]+" t))))
+  (ignore-errors
+    (process-lines thattem-tab-bar-wmctrl-executable "-d")))
 
 (defun thattem-tab-bar-get-workspace-id (workspace)
   "Get the id of the WORKSPACE."
@@ -131,9 +125,10 @@ parameter."
         (mapcan
          #'thattem-tab-bar--format-workspace
          workspace-list)
-      (propertize "Cannot get workspace information!"
-                  'face `(thattem-tab-bar/highlight-face-2
-                          (:height ,thattem-tab-bar-big-font-height))))))
+      (propertize
+       "Cannot get workspace information!"
+       'face `(thattem-tab-bar/highlight-face-2
+               (:height ,thattem-tab-bar-big-font-height))))))
 
 ;; Since mouse wheel event on tab bar cannot get the `posn-string`,
 ;; we cannot use text property to judge whether scroll workspace or
@@ -145,7 +140,7 @@ parameter."
   (let* ((super #'thattem-tab-bar-format-workspaces)
          (position (seq-position tab-bar-format super))
          (before (seq-take tab-bar-format position))
-         (super (funcall super))
+         (super (tab-bar-format-list (list super)))
          (super (mapconcat (lambda (item) (nth 2 item)) super ""))
          (super-width (progn
                         (add-face-text-property
