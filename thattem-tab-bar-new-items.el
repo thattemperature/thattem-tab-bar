@@ -89,8 +89,8 @@ WORKSPACE should be a line of `wmctrl -d` command."
          ignore
          :help "Click to change workspace"))))))
 
-(defun thattem-tab-bar-format-workspaces--before-helpler ()
-  "A helpler function to get workspace information and save as frame \
+(defun thattem-tab-bar-format-workspaces--before-helper ()
+  "A helper function to get workspace information and save as frame \
 parameter."
   (let* ((workspace-list (thattem-tab-bar-get-workspace-list))
          (list-length (length workspace-list))
@@ -116,7 +116,7 @@ parameter."
     (set-frame-parameter nil 'next-workspace-id next-id)))
 
 (add-to-list 'thattem-tab-bar-not-eval-item-list
-             #'thattem-tab-bar-format-workspaces--before-helpler)
+             #'thattem-tab-bar-format-workspaces--before-helper)
 
 (defun thattem-tab-bar-format-workspaces ()
   "Produce workspace control items for the tab bar."

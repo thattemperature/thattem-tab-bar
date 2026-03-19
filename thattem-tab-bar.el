@@ -36,7 +36,7 @@
 (require 'thattem-tab-bar-advices)
 
 (defcustom thattem-tab-bar-format-default
-  '(thattem-tab-bar-format-workspaces--before-helpler
+  '(thattem-tab-bar-format-workspaces--before-helper
     thattem-tab-bar-format-workspaces
     thattem-tab-bar-format-workspaces--after-helper
     thattem-tab-bar-format-history
