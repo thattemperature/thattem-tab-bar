@@ -36,16 +36,32 @@
 (require 'thattem-tab-bar-advices)
 
 (defcustom thattem-tab-bar-format-default
-  '(thattem-tab-bar-format-workspaces--before-helper
-    thattem-tab-bar-format-workspaces
-    thattem-tab-bar-format-workspaces--after-helper
-    thattem-tab-bar-format-history
+  '(thattem-tab-bar-format-history
     thattem-tab-bar-format-tabs
     thattem-tab-bar-format-add-tab
     thattem-tab-bar-format-align-right
     thattem-tab-bar-format-global)
   "New value for \\='tab-bar-format\\='."
   :type '(repeat symbol)
+  :group 'thattem-tab-bar)
+
+(defcustom thattem-tab-bar-format-modern
+  '(thattem-tab-bar-format-workspaces--before-helper
+    thattem-tab-bar-format-workspaces
+    thattem-tab-bar-format-workspaces--after-helper
+    thattem-tab-bar-format-tabs
+    thattem-tab-bar-format-align-right
+    thattem-tab-bar-format-global
+    thattem-tab-bar-format-system-monitor)
+  "A modern \\='tab-bar-format\\=' replacement."
+  :type '(repeat symbol)
+  :group 'thattem-tab-bar)
+
+(defcustom thattem-tab-bar-style
+  'thattem-tab-bar-format-default
+  "Style of tab bar."
+  :type '(choice (const thattem-tab-bar-format-default)
+                 (const thattem-tab-bar-format-modern))
   :group 'thattem-tab-bar)
 
 (defvar thattem-tab-bar-mode-map
@@ -64,13 +80,16 @@
   :global t
 
   (when thattem-tab-bar-mode
-    (setq tab-bar-format thattem-tab-bar-format-default))
+    (setq tab-bar-format (symbol-value thattem-tab-bar-style)))
   (when thattem-tab-bar-mode
     (advice-add 'tab-bar-mouse-1 :around
-                #'thattem-tab-bar--advice-around--tab-bar-mouse-1))
+                #'thattem-tab-bar--advice-around--tab-bar-mouse-1)
+    (setq thattem-tab-bar-system-monitor-timer
+          (run-with-timer 0 1 #'thattem-tab-bar-update-system-monitor)))
   (unless thattem-tab-bar-mode
     (advice-remove 'tab-bar-mouse-1
-                   #'thattem-tab-bar--advice-around--tab-bar-mouse-1)))
+                   #'thattem-tab-bar--advice-around--tab-bar-mouse-1)
+    (cancel-timer thattem-tab-bar-system-monitor-timer)))
 
 
 (provide 'thattem-tab-bar)

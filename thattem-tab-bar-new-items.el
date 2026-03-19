@@ -24,12 +24,23 @@
 
 (require 'thattem-tab-bar-replacements)
 
-;;; Workspace control
+;;; Executable and library path configurations
 
-(defcustom thattem-tab-bar-wmctrl-executable "wmctrl"
-  "The wmctrl executable on your system to be used by thattem-tab-bar."
-  :type 'string
-  :group 'thattem-tab-bar)
+(eval-and-compile
+  (defcustom thattem-tab-bar-wmctrl-executable "wmctrl"
+    "The wmctrl executable on your system to be used by thattem-tab-bar."
+    :type 'string
+    :group 'thattem-tab-bar)
+
+  (defcustom thattem-tab-bar-thattem-library-path
+    "/usr/local/lib/libthattem_emacs_library.so"
+    "The path of thattem-emacs-library."
+    :type 'string
+    :group 'thattem-tab-bar)
+
+  (module-load thattem-tab-bar-thattem-library-path))
+
+;;; Workspace control
 
 (defun thattem-tab-bar-switch-workspace (id)
   "Switch to workspace with ID."
@@ -175,6 +186,87 @@ parameter."
 
 (add-to-list 'thattem-tab-bar-not-eval-item-list
              #'thattem-tab-bar-format-workspaces--after-helper)
+
+;;; System monitor
+
+(defvar thattem-tab-bar-cpu-percentage 0
+  "The system CPU usage percentage.")
+
+(defvar thattem-tab-bar-mem-percentage 0
+  "The system memory usage percentage.")
+
+(defvar thattem-tab-bar-swap-percentage 0
+  "The system swap usage percentage.")
+
+(defvar thattem-tab-bar-upload-speed ""
+  "The system network upload speed.")
+
+(defvar thattem-tab-bar-download-speed ""
+  "The system network download speed.")
+
+(defun thattem-tab-bar-update-system-monitor ()
+  "Update system monitor data."
+  (setq thattem-tab-bar-cpu-percentage
+        (round (* (thattem-cpu-usage) 100)))
+  (setq thattem-tab-bar-mem-percentage
+        (round (* (thattem-mem-usage) 100)))
+  (setq thattem-tab-bar-swap-percentage
+        (round (* (thattem-swap-usage) 100)))
+  (let ((net (thattem-net-speed)))
+    (setq thattem-tab-bar-download-speed
+          (file-size-human-readable (car net) 'si nil "B"))
+    (setq thattem-tab-bar-upload-speed
+          (file-size-human-readable (cadr net) 'si nil "B"))))
+
+(defvar thattem-tab-bar-system-monitor-timer nil
+  "The timer object to update system monitor.")
+
+(defun thattem-tab-bar-format-system-monitor ()
+  "Produce system monitor items for the tab bar."
+  `((system-monitor
+     menu-item
+     ,(concat
+       (nerd-icons-octicon
+        "nf-oct-cpu"
+        :face `(thattem-tab-bar/face-1
+                (:height ,thattem-tab-bar-big-font-height)))
+       (propertize
+        (format "%2d%% " thattem-tab-bar-cpu-percentage)
+        'face `(thattem-tab-bar/face-1
+                (:height ,thattem-tab-bar-big-font-height)))
+       (nerd-icons-faicon
+        "nf-fa-memory"
+        :face `(thattem-tab-bar/face-1
+                (:height ,thattem-tab-bar-big-font-height)))
+       (propertize
+        (format "%2d%% " thattem-tab-bar-mem-percentage)
+        'face `(thattem-tab-bar/face-1
+                (:height ,thattem-tab-bar-big-font-height)))
+       (nerd-icons-mdicon
+        "nf-md-swap_horizontal_bold"
+        :face `(thattem-tab-bar/face-1
+                (:height ,thattem-tab-bar-big-font-height)))
+       (propertize
+        (format "%2d%% " thattem-tab-bar-swap-percentage)
+        'face `(thattem-tab-bar/face-1
+                (:height ,thattem-tab-bar-big-font-height)))
+       (nerd-icons-mdicon
+        "nf-md-upload"
+        :face `(thattem-tab-bar/face-1
+                (:height ,thattem-tab-bar-big-font-height)))
+       (propertize
+        (format "%s " thattem-tab-bar-upload-speed)
+        'face `(thattem-tab-bar/face-1
+                (:height ,thattem-tab-bar-big-font-height)))
+       (nerd-icons-mdicon
+        "nf-md-download"
+        :face `(thattem-tab-bar/face-1
+                (:height ,thattem-tab-bar-big-font-height)))
+       (propertize
+        (format "%s " thattem-tab-bar-download-speed)
+        'face `(thattem-tab-bar/face-1
+                (:height ,thattem-tab-bar-big-font-height))))
+     ignore)))
 
 
 (provide 'thattem-tab-bar-new-items)
