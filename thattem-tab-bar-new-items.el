@@ -228,43 +228,43 @@ parameter."
      ,(concat
        (nerd-icons-octicon
         "nf-oct-cpu"
-        :face `(thattem-tab-bar/face-1
+        :face `(thattem-tab-bar/highlight-face-2
                 (:height ,thattem-tab-bar-big-font-height)))
        (propertize
-        (format "%2d%% " thattem-tab-bar-cpu-percentage)
-        'face `(thattem-tab-bar/face-1
+        (format "%3d%% " thattem-tab-bar-cpu-percentage)
+        'face `(thattem-tab-bar/highlight-face-2
                 (:height ,thattem-tab-bar-big-font-height)))
        (nerd-icons-faicon
         "nf-fa-memory"
-        :face `(thattem-tab-bar/face-1
+        :face `(thattem-tab-bar/highlight-face-2
                 (:height ,thattem-tab-bar-big-font-height)))
        (propertize
-        (format "%2d%% " thattem-tab-bar-mem-percentage)
-        'face `(thattem-tab-bar/face-1
+        (format "%3d%% " thattem-tab-bar-mem-percentage)
+        'face `(thattem-tab-bar/highlight-face-2
                 (:height ,thattem-tab-bar-big-font-height)))
        (nerd-icons-mdicon
         "nf-md-swap_horizontal_bold"
-        :face `(thattem-tab-bar/face-1
+        :face `(thattem-tab-bar/highlight-face-2
                 (:height ,thattem-tab-bar-big-font-height)))
        (propertize
-        (format "%2d%% " thattem-tab-bar-swap-percentage)
-        'face `(thattem-tab-bar/face-1
+        (format "%3d%% " thattem-tab-bar-swap-percentage)
+        'face `(thattem-tab-bar/highlight-face-2
                 (:height ,thattem-tab-bar-big-font-height)))
        (nerd-icons-mdicon
         "nf-md-upload"
-        :face `(thattem-tab-bar/face-1
+        :face `(thattem-tab-bar/highlight-face-2
                 (:height ,thattem-tab-bar-big-font-height)))
        (propertize
-        (format "%s " thattem-tab-bar-upload-speed)
-        'face `(thattem-tab-bar/face-1
+        (format "%5s " thattem-tab-bar-upload-speed)
+        'face `(thattem-tab-bar/highlight-face-2
                 (:height ,thattem-tab-bar-big-font-height)))
        (nerd-icons-mdicon
         "nf-md-download"
-        :face `(thattem-tab-bar/face-1
+        :face `(thattem-tab-bar/highlight-face-2
                 (:height ,thattem-tab-bar-big-font-height)))
        (propertize
-        (format "%s " thattem-tab-bar-download-speed)
-        'face `(thattem-tab-bar/face-1
+        (format "%5s " thattem-tab-bar-download-speed)
+        'face `(thattem-tab-bar/highlight-face-2
                 (:height ,thattem-tab-bar-big-font-height))))
      ignore)))
 
