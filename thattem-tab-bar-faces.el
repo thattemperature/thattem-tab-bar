@@ -30,6 +30,12 @@
   :type 'float
   :group 'thattem-tab-bar)
 
+(defcustom thattem-tab-bar-middle-font-height
+  1.2
+  "The height factor of middle part in tab bar."
+  :type 'float
+  :group 'thattem-tab-bar)
+
 (defcustom thattem-tab-bar-big-font-height
   1.5
   "The height factor of big part in tab bar."

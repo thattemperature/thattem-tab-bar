@@ -40,6 +40,31 @@
 
   (module-load thattem-tab-bar-thattem-library-path))
 
+;;; Align item
+
+(defun thattem-tab-bar-format-align-middle ()
+  "Align the rest of tab bar items to the middle."
+  (let* ((rest (cdr (memq 'thattem-tab-bar-format-align-middle
+                          tab-bar-format)))
+         (rest (cl-set-difference
+                rest (memq 'thattem-tab-bar-format-align-right
+                           tab-bar-format)))
+         (rest (cl-set-difference
+                rest thattem-tab-bar-not-eval-item-list))
+         (rest (tab-bar-format-list rest))
+         (rest (mapconcat (lambda (item) (nth 2 item)) rest ""))
+         (hpos (progn
+                 (add-face-text-property
+                  0 (length rest) 'tab-bar t rest)
+                 (string-pixel-width rest)))
+         (str (propertize " " 'display
+                          `(space :align-to (,(/
+                                               (- (frame-inner-width)
+                                                  hpos)
+                                               2)))
+                          'face `(thattem-tab-bar/face-2))))
+    `((align-right menu-item ,str ignore))))
+
 ;;; Workspace control
 
 (defun thattem-tab-bar-switch-workspace (id)
@@ -65,8 +90,10 @@ WORKSPACE should be a line of `wmctrl -d` command."
   "Format WORKSPACE and return the result as a keymap."
   (let ((current-p (thattem-tab-bar-current-workspace-p workspace))
         (id (thattem-tab-bar-get-workspace-id workspace))
-        (space (propertize " " 'face `(thattem-tab-bar/face-2
-                                       (:height ,thattem-tab-bar-small-font-height)))))
+        (space (propertize
+                " " 'face
+                `(thattem-tab-bar/face-2
+                  (:height ,thattem-tab-bar-small-font-height)))))
     (cond
      (current-p
       `((current-workspace
@@ -77,7 +104,7 @@ WORKSPACE should be a line of `wmctrl -d` command."
             (nerd-icons-mdicon
              (format "nf-md-numeric_%d_circle"
                      (1+ (% (string-to-number id) 10)))
-             :face `(thattem-tab-bar/face-2
+             :face `(thattem-tab-bar/highlight-face-2
                      (:height ,thattem-tab-bar-big-font-height)))
             space)
            'type 'workspace)
@@ -136,10 +163,13 @@ parameter."
         (mapcan
          #'thattem-tab-bar--format-workspace
          workspace-list)
-      (propertize
-       "Cannot get workspace information!"
-       'face `(thattem-tab-bar/highlight-face-2
-               (:height ,thattem-tab-bar-big-font-height))))))
+      `((workspace-error
+         menu-item
+         ,(propertize
+           "Cannot get workspace information!"
+           'face `(thattem-tab-bar/highlight-face-2
+                   (:height ,thattem-tab-bar-big-font-height)))
+         ignore)))))
 
 ;; Since mouse wheel event on tab bar cannot get the `posn-string`,
 ;; we cannot use text property to judge whether scroll workspace or
@@ -223,50 +253,86 @@ parameter."
 
 (defun thattem-tab-bar-format-system-monitor ()
   "Produce system monitor items for the tab bar."
-  `((system-monitor
-     menu-item
-     ,(concat
-       (nerd-icons-octicon
-        "nf-oct-cpu"
-        :face `(thattem-tab-bar/highlight-face-2
-                (:height ,thattem-tab-bar-big-font-height)))
-       (propertize
-        (format "%3d%% " thattem-tab-bar-cpu-percentage)
-        'face `(thattem-tab-bar/highlight-face-2
-                (:height ,thattem-tab-bar-big-font-height)))
-       (nerd-icons-faicon
-        "nf-fa-memory"
-        :face `(thattem-tab-bar/highlight-face-2
-                (:height ,thattem-tab-bar-big-font-height)))
-       (propertize
-        (format "%3d%% " thattem-tab-bar-mem-percentage)
-        'face `(thattem-tab-bar/highlight-face-2
-                (:height ,thattem-tab-bar-big-font-height)))
-       (nerd-icons-mdicon
-        "nf-md-swap_horizontal_bold"
-        :face `(thattem-tab-bar/highlight-face-2
-                (:height ,thattem-tab-bar-big-font-height)))
-       (propertize
-        (format "%3d%% " thattem-tab-bar-swap-percentage)
-        'face `(thattem-tab-bar/highlight-face-2
-                (:height ,thattem-tab-bar-big-font-height)))
-       (nerd-icons-mdicon
-        "nf-md-upload"
-        :face `(thattem-tab-bar/highlight-face-2
-                (:height ,thattem-tab-bar-big-font-height)))
-       (propertize
-        (format "%5s " thattem-tab-bar-upload-speed)
-        'face `(thattem-tab-bar/highlight-face-2
-                (:height ,thattem-tab-bar-big-font-height)))
-       (nerd-icons-mdicon
-        "nf-md-download"
-        :face `(thattem-tab-bar/highlight-face-2
-                (:height ,thattem-tab-bar-big-font-height)))
-       (propertize
-        (format "%5s " thattem-tab-bar-download-speed)
-        'face `(thattem-tab-bar/highlight-face-2
-                (:height ,thattem-tab-bar-big-font-height))))
-     ignore)))
+  (append
+   `((system-monitor-left-sep
+      menu-item
+      ,(nerd-icons-powerline
+        "nf-ple-pixelated_squares_small_mirrored"
+        :face `(thattem-tab-bar/face-2
+                :height ,thattem-tab-bar-big-font-height))
+      ignore :help ""))
+   `((system-monitor-cpu
+      menu-item
+      ,(concat
+        (nerd-icons-octicon
+         "nf-oct-cpu"
+         :face `(thattem-tab-bar/highlight-face-1
+                 (:height ,thattem-tab-bar-middle-font-height)))
+        (propertize
+         (format "%3d%% " thattem-tab-bar-cpu-percentage)
+         'face `(thattem-tab-bar/highlight-face-1
+                 (:height ,thattem-tab-bar-middle-font-height))))
+      ignore
+      :help "CPU usage"))
+   `((system-monitor-mem
+      menu-item
+      ,(concat
+        (nerd-icons-faicon
+         "nf-fa-memory"
+         :face `(thattem-tab-bar/highlight-face-1
+                 (:height ,thattem-tab-bar-middle-font-height)))
+        (propertize
+         (format "%3d%% " thattem-tab-bar-mem-percentage)
+         'face `(thattem-tab-bar/highlight-face-1
+                 (:height ,thattem-tab-bar-middle-font-height))))
+      ignore
+      :help "Memory usage"))
+   `((system-monitor-swap
+      menu-item
+      ,(concat
+        (nerd-icons-mdicon
+         "nf-md-swap_horizontal_bold"
+         :face `(thattem-tab-bar/highlight-face-1
+                 (:height ,thattem-tab-bar-middle-font-height)))
+        (propertize
+         (format "%3d%% " thattem-tab-bar-swap-percentage)
+         'face `(thattem-tab-bar/highlight-face-1
+                 (:height ,thattem-tab-bar-middle-font-height))))
+      ignore
+      :help "Swap usage"))
+   `((system-monitor-upload
+      menu-item
+      ,(concat
+        (nerd-icons-mdicon
+         "nf-md-upload"
+         :face `(thattem-tab-bar/highlight-face-1
+                 (:height ,thattem-tab-bar-middle-font-height)))
+        (propertize
+         (format "%5s " thattem-tab-bar-upload-speed)
+         'face `(thattem-tab-bar/highlight-face-1
+                 (:height ,thattem-tab-bar-middle-font-height))))
+      ignore
+      :help "Upload speed"))
+   `((system-monitor-download
+      menu-item
+      ,(concat
+        (nerd-icons-mdicon
+         "nf-md-download"
+         :face `(thattem-tab-bar/highlight-face-1
+                 (:height ,thattem-tab-bar-middle-font-height)))
+        (propertize
+         (format "%5s " thattem-tab-bar-download-speed)
+         'face `(thattem-tab-bar/highlight-face-1
+                 (:height ,thattem-tab-bar-middle-font-height))))
+      ignore
+      :help "Download speed"))
+   `((system-monitor-right-sep
+      menu-item
+      ,(nerd-icons-powerline
+        "nf-ple-pixelated_squares_big"
+        :face `(thattem-tab-bar/face-2
+                :height ,thattem-tab-bar-big-font-height))
+      ignore :help ""))))
 
 
 (provide 'thattem-tab-bar-new-items)
