@@ -149,8 +149,9 @@ parameter."
   "A helper function to set workspace item's X coordinate as frame \
 parameter."
   (let* ((super #'thattem-tab-bar-format-workspaces)
-         (position (seq-position tab-bar-format super))
-         (before (seq-take tab-bar-format position))
+         (before (cl-set-difference
+                  tab-bar-format (memq super tab-bar-format)))
+         (rest (cdr (memq super tab-bar-format)))
          (super (tab-bar-format-list (list super)))
          (super (mapconcat (lambda (item) (nth 2 item)) super ""))
          (super-width (progn
@@ -158,8 +159,7 @@ parameter."
                          0 (length super) 'tab-bar t super)
                         (string-pixel-width super))))
     (if (memq #'thattem-tab-bar-format-align-right before)
-        (let* ((rest (cdr (memq super tab-bar-format)))
-               (rest (cl-set-difference
+        (let* ((rest (cl-set-difference
                       rest thattem-tab-bar-not-eval-item-list))
                (rest (tab-bar-format-list rest))
                (rest (mapconcat (lambda (item) (nth 2 item)) rest ""))
