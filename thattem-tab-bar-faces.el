@@ -45,27 +45,39 @@
 ;;; Define faces
 
 (defface thattem-tab-bar/face-1
-  nil
+  '((t
+     :background "black"
+     :foreground "white"))
   "First face for tab bar.")
 
 (defface thattem-tab-bar/face-2
-  nil
+  '((t
+     :background "white"
+     :foreground "black"))
   "Second face for tab bar.")
 
 (defface thattem-tab-bar/thin-face-1
-  nil
+  '((t
+     :background "black"
+     :foreground "white"))
   "First face with lighter weight for tab bar.")
 
 (defface thattem-tab-bar/thin-face-2
-  nil
+  '((t
+     :background "white"
+     :foreground "black"))
   "Second face with lighter weight for tab bar.")
 
 (defface thattem-tab-bar/highlight-face-1
-  nil
+  '((t
+     :background "black"
+     :foreground "white"))
   "First face for highlighted part on tab bar.")
 
 (defface thattem-tab-bar/highlight-face-2
-  nil
+  '((t
+     :background "white"
+     :foreground "black"))
   "Second face for highlighted part on tab bar.")
 
 
