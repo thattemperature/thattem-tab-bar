@@ -43,25 +43,42 @@
 ;;; Align item
 
 (defun thattem-tab-bar-format-align-middle ()
-  "Align the rest of tab bar items to the middle."
-  (let* ((rest (cdr (memq 'thattem-tab-bar-format-align-middle
+  "Align the rest of tab bar items to the middle.
+
+It will keep items after \\='thattem-tab-bar-format-align-right\\='
+align to the right.  And if the \"right part\" is long, the
+\"middle part\" will be pushed to the left."
+  (let* ((middle (cdr (memq 'thattem-tab-bar-format-align-middle
+                            tab-bar-format)))
+         (middle (cl-set-difference
+                  middle (memq 'thattem-tab-bar-format-align-right
+                               tab-bar-format)))
+         (middle (cl-set-difference
+                  middle thattem-tab-bar-not-eval-item-list))
+         (middle (tab-bar-format-list middle))
+         (middle (mapconcat (lambda (item) (nth 2 item)) middle ""))
+         (hpos-middle (progn
+                        (add-face-text-property
+                         0 (length middle) 'tab-bar t middle)
+                        (string-pixel-width middle)))
+         (rest (cdr (memq 'thattem-tab-bar-format-align-right
                           tab-bar-format)))
-         (rest (cl-set-difference
-                rest (memq 'thattem-tab-bar-format-align-right
-                           tab-bar-format)))
          (rest (cl-set-difference
                 rest thattem-tab-bar-not-eval-item-list))
          (rest (tab-bar-format-list rest))
          (rest (mapconcat (lambda (item) (nth 2 item)) rest ""))
-         (hpos (progn
-                 (add-face-text-property
-                  0 (length rest) 'tab-bar t rest)
-                 (string-pixel-width rest)))
+         (hpos-rest (progn
+                      (add-face-text-property
+                       0 (length rest) 'tab-bar t rest)
+                      (string-pixel-width rest)))
          (str (propertize " " 'display
-                          `(space :align-to (,(/
-                                               (- (frame-inner-width)
-                                                  hpos)
-                                               2)))
+                          `(space :align-to
+                                  (,(min(/ (- (frame-inner-width)
+                                              hpos-middle)
+                                           2)
+                                        (- (frame-inner-width)
+                                           hpos-middle
+                                           hpos-rest))))
                           'face `(thattem-tab-bar/face-2))))
     `((align-right menu-item ,str ignore))))
 
