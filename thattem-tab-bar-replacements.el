@@ -151,7 +151,7 @@ Format TAB using its index I."
       menu-item
       ,(nerd-icons-powerline
         "nf-pl-left_hard_divider"
-        :face `(thattem-tab-bar/face-1
+        :face `(thattem-tab-bar/thin-face-1
                 (:height ,thattem-tab-bar-big-font-height)))
       ignore :help ""))
    (cond
@@ -171,7 +171,7 @@ Format TAB using its index I."
       menu-item
       ,(nerd-icons-powerline
         "nf-pl-left_hard_divider"
-        :face `(thattem-tab-bar/face-2
+        :face `(thattem-tab-bar/thin-face-2
                 (:height ,thattem-tab-bar-big-font-height)))
       ignore :help ""))
    (when (alist-get 'close-binding tab)

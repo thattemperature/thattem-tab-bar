@@ -52,6 +52,14 @@
   nil
   "Second face for tab bar.")
 
+(defface thattem-tab-bar/thin-face-1
+  nil
+  "First face with lighter weight for tab bar.")
+
+(defface thattem-tab-bar/thin-face-2
+  nil
+  "Second face with lighter weight for tab bar.")
+
 (defface thattem-tab-bar/highlight-face-1
   nil
   "First face for highlighted part on tab bar.")

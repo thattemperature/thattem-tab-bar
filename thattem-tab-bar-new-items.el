@@ -109,7 +109,7 @@ WORKSPACE should be a line of `wmctrl -d` command."
         (id (thattem-tab-bar-get-workspace-id workspace))
         (space (propertize
                 " " 'face
-                `(thattem-tab-bar/face-2
+                `(thattem-tab-bar/thin-face-2
                   (:height ,thattem-tab-bar-small-font-height)))))
     (cond
      (current-p
@@ -121,7 +121,7 @@ WORKSPACE should be a line of `wmctrl -d` command."
             (nerd-icons-mdicon
              (format "nf-md-numeric_%d_circle"
                      (1+ (% (string-to-number id) 10)))
-             :face `(thattem-tab-bar/highlight-face-2
+             :face `(thattem-tab-bar/thin-face-2
                      (:height ,thattem-tab-bar-big-font-height)))
             space)
            'type 'workspace)
@@ -136,7 +136,7 @@ WORKSPACE should be a line of `wmctrl -d` command."
             (nerd-icons-mdicon
              (format "nf-md-numeric_%d_circle_outline"
                      (1+ (% (string-to-number id) 10)))
-             :face `(thattem-tab-bar/face-2
+             :face `(thattem-tab-bar/thin-face-2
                      (:height ,thattem-tab-bar-big-font-height)))
             space)
            'type 'workspace
@@ -275,7 +275,7 @@ parameter."
       menu-item
       ,(nerd-icons-powerline
         "nf-ple-pixelated_squares_small_mirrored"
-        :face `(thattem-tab-bar/face-2
+        :face `(thattem-tab-bar/thin-face-2
                 :height ,thattem-tab-bar-big-font-height))
       ignore :help ""))
    `((system-monitor-cpu
@@ -347,7 +347,7 @@ parameter."
       menu-item
       ,(nerd-icons-powerline
         "nf-ple-pixelated_squares_big"
-        :face `(thattem-tab-bar/face-2
+        :face `(thattem-tab-bar/thin-face-2
                 :height ,thattem-tab-bar-big-font-height))
       ignore :help ""))))
 
