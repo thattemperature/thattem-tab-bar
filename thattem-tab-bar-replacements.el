@@ -98,7 +98,7 @@ The face is determined by TAB."
        "nf-cod-question"
        :face face))))
 
-(defun thattem-tab-bar-name-format (tab i)
+(defun thattem-tab-bar-name-format-default (tab i)
   "Replacement for \\='tab-bar-tab-name-format-default\\='.
 Build the string shown in tab bar for No.I TAB."
   (let ((current-p (eq (car tab) 'current-tab))
@@ -137,8 +137,39 @@ Build the string shown in tab bar for No.I TAB."
                      thattem-tab-bar-close-button)
                 ""))))
 
+(defun thattem-tab-bar-name-format-simple (tab i)
+  "Replacement for \\='tab-bar-tab-name-format-default\\='.
+Build the string shown in tab bar for No.I TAB.
+Just show nerd icon but not name."
+  (let ((current-p (eq (car tab) 'current-tab))
+        (face (funcall thattem-tab-bar-tab-face-function tab)))
+    (concat (propertize
+             (if tab-bar-tab-hints (format "%d " i) "")
+             'face face)
+            (thattem-tab-bar/icon-for-buffer-name
+             (alist-get 'name tab) tab)
+            (mapconcat
+             (lambda (buffer)
+               (thattem-tab-bar/icon-for-buffer-name
+                buffer tab))
+             (cdr (delete-dups (cons
+                                (if current-p
+                                    (current-buffer)
+                                  (alist-get 'name tab))
+                                (window-state-buffers
+                                 (if current-p
+                                     (window-state-get)
+                                   (alist-get 'ws tab)))))))
+            (propertize
+             " "'face face)
+            (or (and tab-bar-close-button-show
+                     (not (eq tab-bar-close-button-show
+                              (if current-p 'non-selected 'selected)))
+                     thattem-tab-bar-close-button)
+                ""))))
+
 (defcustom thattem-tab-bar-name-format-function
-  #'thattem-tab-bar-name-format
+  #'thattem-tab-bar-name-format-default
   "Replacement for \\='tab-bar-tab-name-format-function\\='."
   :type 'function
   :group 'thattem-tab-bar)

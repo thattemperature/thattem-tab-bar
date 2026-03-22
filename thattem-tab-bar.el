@@ -50,6 +50,7 @@
     thattem-tab-bar-format-workspaces
     thattem-tab-bar-format-workspaces--after-helper
     thattem-tab-bar-format-align-middle
+    thattem-tab-bar-format-add-tab
     thattem-tab-bar-format-system-monitor
     thattem-tab-bar-format-tabs
     thattem-tab-bar-format-align-right
