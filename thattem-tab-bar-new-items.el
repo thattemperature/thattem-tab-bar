@@ -236,6 +236,13 @@ parameter."
 
 ;;; System monitor
 
+(defcustom thattem-tab-bar-threshold-high 80
+  "The threshold of system monitor item in percentage.
+If the (cpu/memory/swap) usage is greater than this,
+that item will be shown with different face."
+  :type 'integer
+  :group 'thattem-tab-bar)
+
 (defvar thattem-tab-bar-cpu-percentage 0
   "The system CPU usage percentage.")
 
@@ -283,11 +290,17 @@ parameter."
       ,(concat
         (nerd-icons-octicon
          "nf-oct-cpu"
-         :face `(thattem-tab-bar/highlight-face-1
+         :face `(,(if (< thattem-tab-bar-cpu-percentage
+                         thattem-tab-bar-threshold-high)
+                      'thattem-tab-bar/highlight-face-1
+                    'thattem-tab-bar/warning-face-1)
                  (:height ,thattem-tab-bar-middle-font-height)))
         (propertize
          (format "%3d%% " thattem-tab-bar-cpu-percentage)
-         'face `(thattem-tab-bar/highlight-face-1
+         'face `(,(if (< thattem-tab-bar-cpu-percentage
+                         thattem-tab-bar-threshold-high)
+                      'thattem-tab-bar/highlight-face-1
+                    'thattem-tab-bar/warning-face-1)
                  (:height ,thattem-tab-bar-middle-font-height))))
       ignore
       :help "CPU usage"))
@@ -296,11 +309,17 @@ parameter."
       ,(concat
         (nerd-icons-faicon
          "nf-fa-memory"
-         :face `(thattem-tab-bar/highlight-face-1
+         :face `(,(if (< thattem-tab-bar-mem-percentage
+                         thattem-tab-bar-threshold-high)
+                      'thattem-tab-bar/highlight-face-1
+                    'thattem-tab-bar/warning-face-1)
                  (:height ,thattem-tab-bar-middle-font-height)))
         (propertize
          (format "%3d%% " thattem-tab-bar-mem-percentage)
-         'face `(thattem-tab-bar/highlight-face-1
+         'face `(,(if (< thattem-tab-bar-mem-percentage
+                         thattem-tab-bar-threshold-high)
+                      'thattem-tab-bar/highlight-face-1
+                    'thattem-tab-bar/warning-face-1)
                  (:height ,thattem-tab-bar-middle-font-height))))
       ignore
       :help "Memory usage"))
@@ -309,11 +328,17 @@ parameter."
       ,(concat
         (nerd-icons-mdicon
          "nf-md-swap_horizontal_bold"
-         :face `(thattem-tab-bar/highlight-face-1
+         :face `(,(if (< thattem-tab-bar-swap-percentage
+                         thattem-tab-bar-threshold-high)
+                      'thattem-tab-bar/highlight-face-1
+                    'thattem-tab-bar/warning-face-1)
                  (:height ,thattem-tab-bar-middle-font-height)))
         (propertize
          (format "%3d%% " thattem-tab-bar-swap-percentage)
-         'face `(thattem-tab-bar/highlight-face-1
+         'face `(,(if (< thattem-tab-bar-swap-percentage
+                         thattem-tab-bar-threshold-high)
+                      'thattem-tab-bar/highlight-face-1
+                    'thattem-tab-bar/warning-face-1)
                  (:height ,thattem-tab-bar-middle-font-height))))
       ignore
       :help "Swap usage"))

@@ -80,6 +80,18 @@
      :foreground "black"))
   "Second face for highlighted part on tab bar.")
 
+(defface thattem-tab-bar/warning-face-1
+  '((t
+     :background "black"
+     :foreground "white"))
+  "First face for warning item on tab bar.")
+
+(defface thattem-tab-bar/warning-face-2
+  '((t
+     :background "white"
+     :foreground "black"))
+  "Second face for warning item on tab bar.")
+
 
 (provide 'thattem-tab-bar-faces)
 ;;; thattem-tab-bar-faces.el ends here
