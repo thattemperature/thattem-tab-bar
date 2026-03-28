@@ -103,6 +103,34 @@ align to the right.  And if the \"right part\" is long, the
 WORKSPACE should be a line of `wmctrl -d` command."
   (string= "*" (cadr (split-string workspace "[ \t\v]+"))))
 
+(defun thattem-tab-bar-update-workspace ()
+  "Update workspace information and save as frame parameter."
+  (let* ((workspace-list (thattem-tab-bar-get-workspace-list))
+         (list-length (length workspace-list))
+         (current-workspace (cl-find-if
+                             #'thattem-tab-bar-current-workspace-p
+                             workspace-list))
+         (specialized-current-id (when current-workspace
+                                   (+
+                                    (string-to-number
+                                     (thattem-tab-bar-get-workspace-id
+                                      current-workspace))
+                                    list-length)))
+         (previous-id (when current-workspace
+                        (number-to-string
+                         (% (1- specialized-current-id)
+                            list-length))))
+         (next-id (when current-workspace
+                    (number-to-string
+                     (% (1+ specialized-current-id)
+                        list-length)))))
+    (set-frame-parameter nil 'workspace-list workspace-list)
+    (set-frame-parameter nil 'previous-workspace-id previous-id)
+    (set-frame-parameter nil 'next-workspace-id next-id)))
+
+(defvar thattem-tab-bar-workspace-timer nil
+  "The timer object to update workspace.")
+
 (defun thattem-tab-bar--format-workspace (workspace)
   "Format WORKSPACE and return the result as a keymap."
   (let ((current-p (thattem-tab-bar-current-workspace-p workspace))
@@ -144,35 +172,6 @@ WORKSPACE should be a line of `wmctrl -d` command."
          ignore
          :help "Click to change workspace"))))))
 
-(defun thattem-tab-bar-format-workspaces--before-helper ()
-  "A helper function to get workspace information and save as frame \
-parameter."
-  (let* ((workspace-list (thattem-tab-bar-get-workspace-list))
-         (list-length (length workspace-list))
-         (current-workspace (cl-find-if
-                             #'thattem-tab-bar-current-workspace-p
-                             workspace-list))
-         (specialized-current-id (when current-workspace
-                                   (+
-                                    (string-to-number
-                                     (thattem-tab-bar-get-workspace-id
-                                      current-workspace))
-                                    list-length)))
-         (previous-id (when current-workspace
-                        (number-to-string
-                         (% (1- specialized-current-id)
-                            list-length))))
-         (next-id (when current-workspace
-                    (number-to-string
-                     (% (1+ specialized-current-id)
-                        list-length)))))
-    (set-frame-parameter nil 'workspace-list workspace-list)
-    (set-frame-parameter nil 'previous-workspace-id previous-id)
-    (set-frame-parameter nil 'next-workspace-id next-id)))
-
-(add-to-list 'thattem-tab-bar-not-eval-item-list
-             #'thattem-tab-bar-format-workspaces--before-helper)
-
 (defun thattem-tab-bar-format-workspaces ()
   "Produce workspace control items for the tab bar."
   (let ((workspace-list (frame-parameter nil 'workspace-list)))
@@ -192,47 +191,32 @@ parameter."
 ;; we cannot use text property to judge whether scroll workspace or
 ;; scroll tab, so I save the X coordinate of the workspace item as
 ;; frame parameter and use it as the judgment.
-(defun thattem-tab-bar-format-workspaces--after-helper ()
+(defun thattem-tab-bar-format-workspaces--position-helper ()
   "A helper function to set workspace item's X coordinate as frame \
 parameter."
   (let* ((super #'thattem-tab-bar-format-workspaces)
          (before (cl-set-difference
                   tab-bar-format (memq super tab-bar-format)))
-         (rest (cdr (memq super tab-bar-format)))
+         (before (cl-set-difference
+                  before thattem-tab-bar-not-eval-item-list))
+         (before (tab-bar-format-list before))
+         (before (mapconcat (lambda (item) (nth 2 item)) before ""))
+         (before-width (progn
+                         (add-face-text-property
+                          0 (length before) 'tab-bar t before)
+                         (string-pixel-width before)))
          (super (tab-bar-format-list (list super)))
          (super (mapconcat (lambda (item) (nth 2 item)) super ""))
          (super-width (progn
                         (add-face-text-property
                          0 (length super) 'tab-bar t super)
                         (string-pixel-width super))))
-    (if (memq #'thattem-tab-bar-format-align-right before)
-        (let* ((rest (cl-set-difference
-                      rest thattem-tab-bar-not-eval-item-list))
-               (rest (tab-bar-format-list rest))
-               (rest (mapconcat (lambda (item) (nth 2 item)) rest ""))
-               (rest-width (progn
-                             (add-face-text-property
-                              0 (length rest) 'tab-bar t rest)
-                             (string-pixel-width rest)))
-               (frame-width (frame-inner-width)))
-          (set-frame-parameter nil 'workspace-x-bound
-                               (cons (- frame-width
-                                        rest-width super-width)
-                                     (- frame-width rest-width))))
-      (let* ((before (cl-set-difference
-                      before thattem-tab-bar-not-eval-item-list))
-             (before (tab-bar-format-list before))
-             (before (mapconcat (lambda (item) (nth 2 item)) before ""))
-             (before-width (progn
-                             (add-face-text-property
-                              0 (length before) 'tab-bar t before)
-                             (string-pixel-width before))))
-        (set-frame-parameter nil 'workspace-x-bound
-                             (cons before-width
-                                   (+ before-width super-width)))))))
+    (set-frame-parameter nil 'workspace-x-bound
+                         (cons before-width
+                               (+ before-width super-width)))))
 
 (add-to-list 'thattem-tab-bar-not-eval-item-list
-             #'thattem-tab-bar-format-workspaces--after-helper)
+             #'thattem-tab-bar-format-workspaces--position-helper)
 
 ;;; System monitor
 

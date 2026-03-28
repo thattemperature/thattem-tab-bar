@@ -46,9 +46,8 @@
   :group 'thattem-tab-bar)
 
 (defcustom thattem-tab-bar-format-modern
-  '(thattem-tab-bar-format-workspaces--before-helper
-    thattem-tab-bar-format-workspaces
-    thattem-tab-bar-format-workspaces--after-helper
+  '(thattem-tab-bar-format-workspaces
+    thattem-tab-bar-format-workspaces--position-helper
     thattem-tab-bar-format-align-middle
     thattem-tab-bar-format-add-tab
     thattem-tab-bar-format-system-monitor
@@ -86,11 +85,14 @@
   (when thattem-tab-bar-mode
     (advice-add 'tab-bar-mouse-1 :around
                 #'thattem-tab-bar--advice-around--tab-bar-mouse-1)
+    (setq thattem-tab-bar-workspace-timer
+          (run-with-timer 0 1 #'thattem-tab-bar-update-workspace))
     (setq thattem-tab-bar-system-monitor-timer
           (run-with-timer 0 1 #'thattem-tab-bar-update-system-monitor)))
   (unless thattem-tab-bar-mode
     (advice-remove 'tab-bar-mouse-1
                    #'thattem-tab-bar--advice-around--tab-bar-mouse-1)
+    (cancel-timer thattem-tab-bar-workspace-timer)
     (cancel-timer thattem-tab-bar-system-monitor-timer)))
 
 
