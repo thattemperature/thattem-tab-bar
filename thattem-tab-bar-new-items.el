@@ -40,6 +40,13 @@
 
   (module-load thattem-tab-bar-thattem-library-path))
 
+;;; Special configurations
+
+(defcustom thattem-tab-bar-timer-frequency 10
+  "Timer update frequency that used in new items in thattem-tab-bar."
+  :type 'integer
+  :group 'thattem-tab-bar)
+
 ;;; Align item
 
 (defun thattem-tab-bar-format-align-middle ()
@@ -105,28 +112,31 @@ WORKSPACE should be a line of `wmctrl -d` command."
 
 (defun thattem-tab-bar-update-workspace ()
   "Update workspace information and save as frame parameter."
-  (let* ((workspace-list (thattem-tab-bar-get-workspace-list))
-         (list-length (length workspace-list))
-         (current-workspace (cl-find-if
-                             #'thattem-tab-bar-current-workspace-p
-                             workspace-list))
-         (specialized-current-id (when current-workspace
-                                   (+
-                                    (string-to-number
-                                     (thattem-tab-bar-get-workspace-id
-                                      current-workspace))
-                                    list-length)))
-         (previous-id (when current-workspace
+  (let ((old-workspace-list (frame-parameter nil 'workspace-list))
+        (workspace-list (thattem-tab-bar-get-workspace-list)))
+    (unless (equal old-workspace-list workspace-list)
+      (let* ((list-length (length workspace-list))
+             (current-workspace (cl-find-if
+                                 #'thattem-tab-bar-current-workspace-p
+                                 workspace-list))
+             (specialized-current-id (when current-workspace
+                                       (+
+                                        (string-to-number
+                                         (thattem-tab-bar-get-workspace-id
+                                          current-workspace))
+                                        list-length)))
+             (previous-id (when current-workspace
+                            (number-to-string
+                             (% (1- specialized-current-id)
+                                list-length))))
+             (next-id (when current-workspace
                         (number-to-string
-                         (% (1- specialized-current-id)
-                            list-length))))
-         (next-id (when current-workspace
-                    (number-to-string
-                     (% (1+ specialized-current-id)
-                        list-length)))))
-    (set-frame-parameter nil 'workspace-list workspace-list)
-    (set-frame-parameter nil 'previous-workspace-id previous-id)
-    (set-frame-parameter nil 'next-workspace-id next-id)))
+                         (% (1+ specialized-current-id)
+                            list-length)))))
+        (set-frame-parameter nil 'workspace-list workspace-list)
+        (set-frame-parameter nil 'previous-workspace-id previous-id)
+        (set-frame-parameter nil 'next-workspace-id next-id)
+        (force-mode-line-update t)))))
 
 (defvar thattem-tab-bar-workspace-timer nil
   "The timer object to update workspace.")
@@ -227,6 +237,9 @@ that item will be shown with different face."
   :type 'integer
   :group 'thattem-tab-bar)
 
+(defvar thattem-tab-bar-cpu-percentage-buffer nil
+  "Buffer of system CPU usage percentage.")
+
 (defvar thattem-tab-bar-cpu-percentage 0
   "The system CPU usage percentage.")
 
@@ -236,25 +249,51 @@ that item will be shown with different face."
 (defvar thattem-tab-bar-swap-percentage 0
   "The system swap usage percentage.")
 
+(defvar thattem-tab-bar-upload-speed-buffer nil
+  "Buffer of system network upload speed.")
+
 (defvar thattem-tab-bar-upload-speed ""
   "The system network upload speed.")
+
+(defvar thattem-tab-bar-download-speed-buffer nil
+  "Buffer of system network download speed.")
 
 (defvar thattem-tab-bar-download-speed ""
   "The system network download speed.")
 
 (defun thattem-tab-bar-update-system-monitor ()
   "Update system monitor data."
+  (setq thattem-tab-bar-cpu-percentage-buffer
+        (take thattem-tab-bar-timer-frequency
+              (cons (thattem-cpu-usage)
+                    thattem-tab-bar-cpu-percentage-buffer)))
   (setq thattem-tab-bar-cpu-percentage
-        (round (* (thattem-cpu-usage) 100)))
+        (round (* (/ (apply #'+ thattem-tab-bar-cpu-percentage-buffer)
+                     thattem-tab-bar-timer-frequency)
+                  100)))
   (setq thattem-tab-bar-mem-percentage
         (round (* (thattem-mem-usage) 100)))
   (setq thattem-tab-bar-swap-percentage
         (round (* (thattem-swap-usage) 100)))
   (let ((net (thattem-net-speed)))
+    (setq thattem-tab-bar-download-speed-buffer
+          (take thattem-tab-bar-timer-frequency
+                (cons (car net)
+                      thattem-tab-bar-download-speed-buffer)))
     (setq thattem-tab-bar-download-speed
-          (file-size-human-readable (car net) 'si nil "B"))
+          (file-size-human-readable
+           (/ (apply #'+ thattem-tab-bar-download-speed-buffer)
+              thattem-tab-bar-timer-frequency)
+           'si nil "B"))
+    (setq thattem-tab-bar-upload-speed-buffer
+          (take thattem-tab-bar-timer-frequency
+                (cons (cadr net)
+                      thattem-tab-bar-upload-speed-buffer)))
     (setq thattem-tab-bar-upload-speed
-          (file-size-human-readable (cadr net) 'si nil "B"))))
+          (file-size-human-readable
+           (/ (apply #'+ thattem-tab-bar-upload-speed-buffer)
+              thattem-tab-bar-timer-frequency)
+           'si nil "B"))))
 
 (defvar thattem-tab-bar-system-monitor-timer nil
   "The timer object to update system monitor.")

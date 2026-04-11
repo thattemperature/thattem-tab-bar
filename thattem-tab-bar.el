@@ -86,9 +86,15 @@
     (advice-add 'tab-bar-mouse-1 :around
                 #'thattem-tab-bar--advice-around--tab-bar-mouse-1)
     (setq thattem-tab-bar-workspace-timer
-          (run-with-timer 0 1 #'thattem-tab-bar-update-workspace))
+          (run-with-timer
+           0
+           (/ 1.0 thattem-tab-bar-timer-frequency)
+           #'thattem-tab-bar-update-workspace))
     (setq thattem-tab-bar-system-monitor-timer
-          (run-with-timer 0 1 #'thattem-tab-bar-update-system-monitor)))
+          (run-with-timer
+           0
+           (/ 1.0 thattem-tab-bar-timer-frequency)
+           #'thattem-tab-bar-update-system-monitor)))
   (unless thattem-tab-bar-mode
     (advice-remove 'tab-bar-mouse-1
                    #'thattem-tab-bar--advice-around--tab-bar-mouse-1)
