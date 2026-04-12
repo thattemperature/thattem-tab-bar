@@ -81,7 +81,8 @@
   :global t
 
   (when thattem-tab-bar-mode
-    (setq tab-bar-format (symbol-value thattem-tab-bar-style)))
+    (setopt tab-bar-format (symbol-value thattem-tab-bar-style))
+    (tab-bar-mode))
   (when thattem-tab-bar-mode
     (advice-add 'tab-bar-mouse-1 :around
                 #'thattem-tab-bar--advice-around--tab-bar-mouse-1)
