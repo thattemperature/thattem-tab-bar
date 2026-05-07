@@ -31,7 +31,8 @@
 
 (defgroup thattem-tab-bar nil
   "Modified tab bar."
-  :group 'convenience)
+  :group 'convenience
+  :group 'thattem)
 
 (require 'thattem-tab-bar-advices)
 
