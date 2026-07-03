@@ -22,16 +22,12 @@
 
 ;;; Code:
 
+(require 'cl-lib)
 (require 'thattem-tab-bar-replacements)
 
 ;;; Executable and library path configurations
 
 (eval-and-compile
-  (defcustom thattem-tab-bar-wmctrl-executable "wmctrl"
-    "The wmctrl executable on your system to be used by thattem-tab-bar."
-    :type 'string
-    :group 'thattem-tab-bar)
-
   (defcustom thattem-tab-bar-thattem-library-path
     "/usr/local/lib/libthattem_emacs_library.so"
     "The path of thattem-emacs-library."
@@ -91,51 +87,24 @@ align to the right.  And if the \"right part\" is long, the
 
 ;;; Workspace control
 
-(defun thattem-tab-bar-switch-workspace (id)
-  "Switch to workspace with ID."
-  (ignore-errors
-    (process-lines thattem-tab-bar-wmctrl-executable "-s" id)))
-
-(defun thattem-tab-bar-get-workspace-list ()
-  "Get the list of workspace by `wmctrl` shell command."
-  (ignore-errors
-    (process-lines thattem-tab-bar-wmctrl-executable "-d")))
-
-(defun thattem-tab-bar-get-workspace-id (workspace)
-  "Get the id of the WORKSPACE."
-  (car (split-string workspace "[ \t\v]+")))
-
-(defun thattem-tab-bar-current-workspace-p (workspace)
-  "Return non-nil if WORKSPACE is current workspace.
-WORKSPACE should be a line of `wmctrl -d` command."
-  (string= "*" (cadr (split-string workspace "[ \t\v]+"))))
-
 (defun thattem-tab-bar-update-workspace ()
   "Update workspace information and save as frame parameter."
-  (let ((old-workspace-list (frame-parameter nil 'workspace-list))
-        (workspace-list (thattem-tab-bar-get-workspace-list)))
-    (unless (equal old-workspace-list workspace-list)
-      (let* ((list-length (length workspace-list))
-             (current-workspace (cl-find-if
-                                 #'thattem-tab-bar-current-workspace-p
-                                 workspace-list))
-             (specialized-current-id (when current-workspace
-                                       (+
-                                        (string-to-number
-                                         (thattem-tab-bar-get-workspace-id
-                                          current-workspace))
-                                        list-length)))
-             (previous-id (when current-workspace
-                            (number-to-string
-                             (% (1- specialized-current-id)
-                                list-length))))
-             (next-id (when current-workspace
-                        (number-to-string
-                         (% (1+ specialized-current-id)
-                            list-length)))))
-        (set-frame-parameter nil 'workspace-list workspace-list)
-        (set-frame-parameter nil 'previous-workspace-id previous-id)
-        (set-frame-parameter nil 'next-workspace-id next-id)
+  (let ((old-workspace-count (frame-parameter nil 'workspace-count))
+        (workspace-count (thattem-workspace-count))
+        (old-workspace-active (frame-parameter nil 'workspace-active))
+        (workspace-active (thattem-workspace-active)))
+    (unless (and (equal old-workspace-count workspace-count)
+                 (equal old-workspace-active workspace-active))
+      (let ((previous (when (and workspace-count workspace-active)
+                        (% (1- (+ workspace-count workspace-active))
+                           workspace-count)))
+            (next (when (and workspace-count workspace-active)
+                    (% (1+ (+ workspace-count workspace-active))
+                       workspace-count))))
+        (set-frame-parameter nil 'workspace-count workspace-count)
+        (set-frame-parameter nil 'workspace-active workspace-active)
+        (set-frame-parameter nil 'workspace-previous previous)
+        (set-frame-parameter nil 'workspace-next next)
         (force-mode-line-update t)))))
 
 (defvar thattem-tab-bar-workspace-timer nil
@@ -143,8 +112,8 @@ WORKSPACE should be a line of `wmctrl -d` command."
 
 (defun thattem-tab-bar--format-workspace (workspace)
   "Format WORKSPACE and return the result as a keymap."
-  (let ((current-p (thattem-tab-bar-current-workspace-p workspace))
-        (id (thattem-tab-bar-get-workspace-id workspace))
+  (let ((current-p (car workspace))
+        (id (cdr workspace))
         (space (propertize
                 " " 'face
                 `(thattem-tab-bar/thin-face-2
@@ -158,7 +127,7 @@ WORKSPACE should be a line of `wmctrl -d` command."
             space
             (nerd-icons-mdicon
              (format "nf-md-numeric_%d_circle"
-                     (1+ (% (string-to-number id) 10)))
+                     (1+ (% id 10)))
              :face `(thattem-tab-bar/thin-face-2
                      (:height ,thattem-tab-bar-big-font-height)))
             space)
@@ -166,14 +135,14 @@ WORKSPACE should be a line of `wmctrl -d` command."
          ignore
          :help "Current workspace")))
      (t
-      `((,(intern (format "workspace-%s" id))
+      `((,(intern (format "workspace-%d" id))
          menu-item
          ,(propertize
            (concat
             space
             (nerd-icons-mdicon
              (format "nf-md-numeric_%d_circle_outline"
-                     (1+ (% (string-to-number id) 10)))
+                     (1+ (% id 10)))
              :face `(thattem-tab-bar/thin-face-2
                      (:height ,thattem-tab-bar-big-font-height)))
             space)
@@ -184,7 +153,12 @@ WORKSPACE should be a line of `wmctrl -d` command."
 
 (defun thattem-tab-bar-format-workspaces ()
   "Produce workspace control items for the tab bar."
-  (let ((workspace-list (frame-parameter nil 'workspace-list)))
+  (let* ((workspace-count (frame-parameter nil 'workspace-count))
+         (workspace-active (frame-parameter nil 'workspace-active))
+         (workspace-list
+          (when (and workspace-count workspace-active)
+            (cl-loop for i from 0 below workspace-count
+                     collect (cons (= i workspace-active) i)))))
     (if workspace-list
         (mapcan
          #'thattem-tab-bar--format-workspace

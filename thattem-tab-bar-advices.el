@@ -36,7 +36,7 @@ of the string under the EVENT."
          (posn-string (posn-string event-start))
          (id (get-text-property
               (cdr posn-string) 'id (car posn-string))))
-    (when id (thattem-tab-bar-switch-workspace id))))
+    (when id (thattem-workspace-switch id))))
 
 (defun thattem-tab-bar--advice-around--tab-bar-mouse-1 (func event)
   "Add workspace switch function to \\='tab-bar-mouse-1\\='.
@@ -61,11 +61,11 @@ Target workspace id is specified by the frame parameter
          (x (car (posn-x-y event-start)))
          (frame (posn-window event-start))
          (x-bound (frame-parameter frame 'workspace-x-bound))
-         (id (frame-parameter frame 'previous-workspace-id)))
+         (id (frame-parameter frame 'workspace-previous)))
     (cond ((and x-bound
                 (<= (car x-bound) x)
                 (< x (cdr x-bound)))
-           (when id (thattem-tab-bar-switch-workspace id)))
+           (when id (thattem-workspace-switch id)))
           (t
            (tab-previous)))))
 
@@ -78,11 +78,11 @@ Target workspace id is specified by the frame parameter
          (x (car (posn-x-y event-start)))
          (frame (posn-window event-start))
          (x-bound (frame-parameter frame 'workspace-x-bound))
-         (id (frame-parameter frame 'next-workspace-id)))
+         (id (frame-parameter frame 'workspace-next)))
     (cond ((and x-bound
                 (<= (car x-bound) x)
                 (< x (cdr x-bound)))
-           (when id (thattem-tab-bar-switch-workspace id)))
+           (when id (thattem-workspace-switch id)))
           (t
            (tab-next)))))
 
