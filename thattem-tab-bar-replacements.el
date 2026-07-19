@@ -130,7 +130,7 @@ Build the string shown in tab bar for No.I TAB."
              (propertize
               " " 'face face))
             (propertize
-             " "'face face)
+             " " 'face face)
             (or (and tab-bar-close-button-show
                      (not (eq tab-bar-close-button-show
                               (if current-p 'non-selected 'selected)))
@@ -161,7 +161,7 @@ Just show nerd icon but not name."
                                      (window-state-get)
                                    (alist-get 'ws tab)))))))
             (propertize
-             " "'face face)
+             " " 'face face)
             (or (and tab-bar-close-button-show
                      (not (eq tab-bar-close-button-show
                               (if current-p 'non-selected 'selected)))
