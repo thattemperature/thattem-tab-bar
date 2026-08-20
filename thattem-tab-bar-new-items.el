@@ -82,7 +82,7 @@ align to the right.  And if the \"right part\" is long, the
                                         (- (frame-inner-width)
                                            hpos-middle
                                            hpos-rest))))
-                          'face `(thattem-tab-bar/face-2))))
+                          'face `(thattem-tab-bar/bright))))
     `((align-right menu-item ,str ignore))))
 
 ;;; Workspace control
@@ -116,7 +116,7 @@ align to the right.  And if the \"right part\" is long, the
         (id (cdr workspace))
         (space (propertize
                 " " 'face
-                `(thattem-tab-bar/thin-face-2
+                `(thattem-tab-bar/bright-thin
                   (:height ,thattem-tab-bar-small-font-height)))))
     (cond
      (current-p
@@ -128,7 +128,7 @@ align to the right.  And if the \"right part\" is long, the
             (nerd-icons-mdicon
              (format "nf-md-numeric_%d_circle"
                      (1+ (% id 10)))
-             :face `(thattem-tab-bar/thin-face-2
+             :face `(thattem-tab-bar/bright-thin
                      (:height ,thattem-tab-bar-big-font-height)))
             space)
            'type 'workspace)
@@ -143,7 +143,7 @@ align to the right.  And if the \"right part\" is long, the
             (nerd-icons-mdicon
              (format "nf-md-numeric_%d_circle_outline"
                      (1+ (% id 10)))
-             :face `(thattem-tab-bar/thin-face-2
+             :face `(thattem-tab-bar/bright-thin
                      (:height ,thattem-tab-bar-big-font-height)))
             space)
            'type 'workspace
@@ -167,7 +167,7 @@ align to the right.  And if the \"right part\" is long, the
          menu-item
          ,(propertize
            "Cannot get workspace information!"
-           'face `(thattem-tab-bar/highlight-face-2
+           'face `(thattem-tab-bar/bright-highlight
                    (:height ,thattem-tab-bar-big-font-height)))
          ignore)))))
 
@@ -279,7 +279,7 @@ that item will be shown with different face."
       menu-item
       ,(nerd-icons-powerline
         "nf-ple-pixelated_squares_small_mirrored"
-        :face `(thattem-tab-bar/thin-face-2
+        :face `(thattem-tab-bar/bright-thin
                 :height ,thattem-tab-bar-big-font-height))
       ignore :help ""))
    `((system-monitor-cpu
@@ -289,15 +289,15 @@ that item will be shown with different face."
          "nf-oct-cpu"
          :face `(,(if (< thattem-tab-bar-cpu-percentage
                          thattem-tab-bar-threshold-high)
-                      'thattem-tab-bar/highlight-face-1
-                    'thattem-tab-bar/warning-face-1)
+                      'thattem-tab-bar/dark-highlight
+                    'thattem-tab-bar/dark-warning)
                  (:height ,thattem-tab-bar-middle-font-height)))
         (propertize
          (format "%3d%% " thattem-tab-bar-cpu-percentage)
          'face `(,(if (< thattem-tab-bar-cpu-percentage
                          thattem-tab-bar-threshold-high)
-                      'thattem-tab-bar/highlight-face-1
-                    'thattem-tab-bar/warning-face-1)
+                      'thattem-tab-bar/dark-highlight
+                    'thattem-tab-bar/dark-warning)
                  (:height ,thattem-tab-bar-middle-font-height))))
       ignore
       :help "CPU usage"))
@@ -308,15 +308,15 @@ that item will be shown with different face."
          "nf-fa-memory"
          :face `(,(if (< thattem-tab-bar-mem-percentage
                          thattem-tab-bar-threshold-high)
-                      'thattem-tab-bar/highlight-face-1
-                    'thattem-tab-bar/warning-face-1)
+                      'thattem-tab-bar/dark-highlight
+                    'thattem-tab-bar/dark-warning)
                  (:height ,thattem-tab-bar-middle-font-height)))
         (propertize
          (format "%3d%% " thattem-tab-bar-mem-percentage)
          'face `(,(if (< thattem-tab-bar-mem-percentage
                          thattem-tab-bar-threshold-high)
-                      'thattem-tab-bar/highlight-face-1
-                    'thattem-tab-bar/warning-face-1)
+                      'thattem-tab-bar/dark-highlight
+                    'thattem-tab-bar/dark-warning)
                  (:height ,thattem-tab-bar-middle-font-height))))
       ignore
       :help "Memory usage"))
@@ -327,15 +327,15 @@ that item will be shown with different face."
          "nf-md-swap_horizontal_bold"
          :face `(,(if (< thattem-tab-bar-swap-percentage
                          thattem-tab-bar-threshold-high)
-                      'thattem-tab-bar/highlight-face-1
-                    'thattem-tab-bar/warning-face-1)
+                      'thattem-tab-bar/dark-highlight
+                    'thattem-tab-bar/dark-warning)
                  (:height ,thattem-tab-bar-middle-font-height)))
         (propertize
          (format "%3d%% " thattem-tab-bar-swap-percentage)
          'face `(,(if (< thattem-tab-bar-swap-percentage
                          thattem-tab-bar-threshold-high)
-                      'thattem-tab-bar/highlight-face-1
-                    'thattem-tab-bar/warning-face-1)
+                      'thattem-tab-bar/dark-highlight
+                    'thattem-tab-bar/dark-warning)
                  (:height ,thattem-tab-bar-middle-font-height))))
       ignore
       :help "Swap usage"))
@@ -344,11 +344,11 @@ that item will be shown with different face."
       ,(concat
         (nerd-icons-mdicon
          "nf-md-upload"
-         :face `(thattem-tab-bar/highlight-face-1
+         :face `(thattem-tab-bar/dark-highlight
                  (:height ,thattem-tab-bar-middle-font-height)))
         (propertize
          (format "%5s " thattem-tab-bar-upload-speed)
-         'face `(thattem-tab-bar/highlight-face-1
+         'face `(thattem-tab-bar/dark-highlight
                  (:height ,thattem-tab-bar-middle-font-height))))
       ignore
       :help "Upload speed"))
@@ -357,11 +357,11 @@ that item will be shown with different face."
       ,(concat
         (nerd-icons-mdicon
          "nf-md-download"
-         :face `(thattem-tab-bar/highlight-face-1
+         :face `(thattem-tab-bar/dark-highlight
                  (:height ,thattem-tab-bar-middle-font-height)))
         (propertize
          (format "%5s " thattem-tab-bar-download-speed)
-         'face `(thattem-tab-bar/highlight-face-1
+         'face `(thattem-tab-bar/dark-highlight
                  (:height ,thattem-tab-bar-middle-font-height))))
       ignore
       :help "Download speed"))
@@ -369,7 +369,7 @@ that item will be shown with different face."
       menu-item
       ,(nerd-icons-powerline
         "nf-ple-pixelated_squares_big"
-        :face `(thattem-tab-bar/thin-face-2
+        :face `(thattem-tab-bar/bright-thin
                 :height ,thattem-tab-bar-big-font-height))
       ignore :help ""))))
 

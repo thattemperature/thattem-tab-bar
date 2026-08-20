@@ -44,53 +44,74 @@
 
 ;;; Define faces
 
-(defface thattem-tab-bar/face-1
-  '((t
-     :background "black"
-     :foreground "white"))
-  "First face for tab bar.")
+(defmacro thattem-tab-bar--define-face (name attributes usage)
+  "Define face used in thattem-tab-bar.
 
-(defface thattem-tab-bar/face-2
+The name of the face will be \"thattem-tab-bar/{NAME}\".
+The face is defined with ATTRIBUTES, and the docstring will be
+\"Face for {USAGE} in thattem-tab-bar.\"."
+  (declare (doc-string 3)
+           (indent defun))
+  `(defface ,(intern (format "thattem-tab-bar/%s"
+                             (symbol-name name)))
+     ,attributes
+     ,(format "Face for %s in thattem-tab-bar."
+              (string-trim usage
+                           "[^[:alpha:]]+"
+                           "[^[:alpha:]]+"))))
+
+(defvar thattem-tab-bar--default-attribute-bright
   '((t
      :background "white"
      :foreground "black"))
-  "Second face for tab bar.")
+  "Default face attributes of bright part.")
 
-(defface thattem-tab-bar/thin-face-1
+(defvar thattem-tab-bar--default-attribute-dark
   '((t
      :background "black"
      :foreground "white"))
-  "First face with lighter weight for tab bar.")
+  "Default face attributes of dark part.")
 
-(defface thattem-tab-bar/thin-face-2
-  '((t
-     :background "white"
-     :foreground "black"))
-  "Second face with lighter weight for tab bar.")
 
-(defface thattem-tab-bar/highlight-face-1
-  '((t
-     :background "black"
-     :foreground "white"))
-  "First face for highlighted part on tab bar.")
+(thattem-tab-bar--define-face
+  bright
+  thattem-tab-bar--default-attribute-bright
+  "Bright part.")
 
-(defface thattem-tab-bar/highlight-face-2
-  '((t
-     :background "white"
-     :foreground "black"))
-  "Second face for highlighted part on tab bar.")
+(thattem-tab-bar--define-face
+  dark
+  thattem-tab-bar--default-attribute-dark
+  "Dark part.")
 
-(defface thattem-tab-bar/warning-face-1
-  '((t
-     :background "black"
-     :foreground "white"))
-  "First face for warning item on tab bar.")
+(thattem-tab-bar--define-face
+  bright-thin
+  thattem-tab-bar--default-attribute-bright
+  "Bright part with thin font.")
 
-(defface thattem-tab-bar/warning-face-2
-  '((t
-     :background "white"
-     :foreground "black"))
-  "Second face for warning item on tab bar.")
+(thattem-tab-bar--define-face
+  dark-thin
+  thattem-tab-bar--default-attribute-dark
+  "Dark part with thin font.")
+
+(thattem-tab-bar--define-face
+  bright-highlight
+  thattem-tab-bar--default-attribute-bright
+  "Highlighted bright part.")
+
+(thattem-tab-bar--define-face
+  dark-highlight
+  thattem-tab-bar--default-attribute-dark
+  "Highlighted dark part.")
+
+(thattem-tab-bar--define-face
+  bright-warning
+  thattem-tab-bar--default-attribute-bright
+  "Bright warning symbols.")
+
+(thattem-tab-bar--define-face
+  dark-warning
+  thattem-tab-bar--default-attribute-dark
+  "Dark warning symbols.")
 
 
 (provide 'thattem-tab-bar-faces)
