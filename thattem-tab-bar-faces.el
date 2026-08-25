@@ -44,6 +44,11 @@
 
 ;;; Define faces
 
+(defgroup thattem-tab-bar-faces nil
+  "Faces used in thattem-tab-bar."
+  :group 'faces
+  :group 'thattem-tab-bar)
+
 (defmacro thattem-tab-bar--define-face (name attributes usage)
   "Define face used in thattem-tab-bar.
 
@@ -58,7 +63,9 @@ The face is defined with ATTRIBUTES, and the docstring will be
      ,(format "Face for %s in thattem-tab-bar."
               (string-trim usage
                            "[^[:alpha:]]+"
-                           "[^[:alpha:]]+"))))
+                           "[^[:alpha:]]+"))
+     :group
+     'thattem-tab-bar-faces))
 
 (defvar thattem-tab-bar--default-attribute-bright
   '((t
