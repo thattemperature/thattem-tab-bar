@@ -103,6 +103,7 @@
 
   (when thattem-tab-bar-mode
     (tab-bar-mode)
+    (setopt tab-bar-auto-width nil)
     (setopt tab-bar-format (symbol-value thattem-tab-bar-style))))
 
 
