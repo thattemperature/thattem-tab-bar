@@ -111,6 +111,16 @@ The face is defined with ATTRIBUTES, and the docstring will be
   "Highlighted dark part.")
 
 (thattem-tab-bar--define-face
+  bright-hover
+  thattem-tab-bar--default-attribute-bright
+  "Highlighted bright part.")
+
+(thattem-tab-bar--define-face
+  dark-hover
+  thattem-tab-bar--default-attribute-dark
+  "Highlighted dark part.")
+
+(thattem-tab-bar--define-face
   bright-warning
   thattem-tab-bar--default-attribute-bright
   "Bright warning symbols.")

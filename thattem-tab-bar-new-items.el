@@ -23,7 +23,8 @@
 ;;; Code:
 
 (require 'cl-lib)
-(require 'thattem-tab-bar-replacements)
+(require 'nerd-icons)
+(require 'thattem-tab-bar-faces)
 
 ;;; Executable and library path configurations
 
@@ -42,48 +43,6 @@
   "Timer update frequency that used in new items in thattem-tab-bar."
   :type 'integer
   :group 'thattem-tab-bar)
-
-;;; Align item
-
-(defun thattem-tab-bar-format-align-middle ()
-  "Align the rest of tab bar items to the middle.
-
-It will keep items after \\='thattem-tab-bar-format-align-right\\='
-align to the right.  And if the \"right part\" is long, the
-\"middle part\" will be pushed to the left."
-  (let* ((middle (cdr (memq 'thattem-tab-bar-format-align-middle
-                            tab-bar-format)))
-         (middle (cl-set-difference
-                  middle (memq 'thattem-tab-bar-format-align-right
-                               tab-bar-format)))
-         (middle (cl-set-difference
-                  middle thattem-tab-bar-not-eval-item-list))
-         (middle (tab-bar-format-list middle))
-         (middle (mapconcat (lambda (item) (nth 2 item)) middle ""))
-         (hpos-middle (progn
-                        (add-face-text-property
-                         0 (length middle) 'tab-bar t middle)
-                        (string-pixel-width middle)))
-         (rest (cdr (memq 'thattem-tab-bar-format-align-right
-                          tab-bar-format)))
-         (rest (cl-set-difference
-                rest thattem-tab-bar-not-eval-item-list))
-         (rest (tab-bar-format-list rest))
-         (rest (mapconcat (lambda (item) (nth 2 item)) rest ""))
-         (hpos-rest (progn
-                      (add-face-text-property
-                       0 (length rest) 'tab-bar t rest)
-                      (string-pixel-width rest)))
-         (str (propertize " " 'display
-                          `(space :align-to
-                                  (,(min(/ (- (frame-inner-width)
-                                              hpos-middle)
-                                           2)
-                                        (- (frame-inner-width)
-                                           hpos-middle
-                                           hpos-rest))))
-                          'face `(thattem-tab-bar/bright))))
-    `((align-right menu-item ,str ignore))))
 
 ;;; Workspace control
 
@@ -125,11 +84,13 @@ align to the right.  And if the \"right part\" is long, the
          ,(propertize
            (concat
             space
-            (nerd-icons-mdicon
-             (format "nf-md-numeric_%d_circle"
-                     (1+ (% id 10)))
-             :face `(thattem-tab-bar/bright-thin
-                     (:height ,thattem-tab-bar-big-font-height)))
+            (propertize
+             (nerd-icons-mdicon
+              (format "nf-md-numeric_%d_circle"
+                      (1+ (% id 10)))
+              :face `(thattem-tab-bar/bright-thin
+                      (:height ,thattem-tab-bar-big-font-height)))
+             'mouse-face 'thattem-tab-bar/bright-hover)
             space)
            'type 'workspace)
          ignore
@@ -140,11 +101,13 @@ align to the right.  And if the \"right part\" is long, the
          ,(propertize
            (concat
             space
-            (nerd-icons-mdicon
-             (format "nf-md-numeric_%d_circle_outline"
-                     (1+ (% id 10)))
-             :face `(thattem-tab-bar/bright-thin
-                     (:height ,thattem-tab-bar-big-font-height)))
+            (propertize
+             (nerd-icons-mdicon
+              (format "nf-md-numeric_%d_circle_outline"
+                      (1+ (% id 10)))
+              :face `(thattem-tab-bar/bright-thin
+                      (:height ,thattem-tab-bar-big-font-height)))
+             'mouse-face 'thattem-tab-bar/bright-hover)
             space)
            'type 'workspace
            'id id)
@@ -170,37 +133,6 @@ align to the right.  And if the \"right part\" is long, the
            'face `(thattem-tab-bar/bright-highlight
                    (:height ,thattem-tab-bar-big-font-height)))
          ignore)))))
-
-;; Since mouse wheel event on tab bar cannot get the `posn-string`,
-;; we cannot use text property to judge whether scroll workspace or
-;; scroll tab, so I save the X coordinate of the workspace item as
-;; frame parameter and use it as the judgment.
-(defun thattem-tab-bar-format-workspaces--position-helper ()
-  "A helper function to set workspace item's X coordinate as frame \
-parameter."
-  (let* ((super #'thattem-tab-bar-format-workspaces)
-         (before (cl-set-difference
-                  tab-bar-format (memq super tab-bar-format)))
-         (before (cl-set-difference
-                  before thattem-tab-bar-not-eval-item-list))
-         (before (tab-bar-format-list before))
-         (before (mapconcat (lambda (item) (nth 2 item)) before ""))
-         (before-width (progn
-                         (add-face-text-property
-                          0 (length before) 'tab-bar t before)
-                         (string-pixel-width before)))
-         (super (tab-bar-format-list (list super)))
-         (super (mapconcat (lambda (item) (nth 2 item)) super ""))
-         (super-width (progn
-                        (add-face-text-property
-                         0 (length super) 'tab-bar t super)
-                        (string-pixel-width super))))
-    (set-frame-parameter nil 'workspace-x-bound
-                         (cons before-width
-                               (+ before-width super-width)))))
-
-(add-to-list 'thattem-tab-bar-not-eval-item-list
-             #'thattem-tab-bar-format-workspaces--position-helper)
 
 ;;; System monitor
 

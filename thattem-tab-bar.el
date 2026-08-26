@@ -34,10 +34,12 @@
   :group 'convenience
   :group 'thattem)
 
+(require 'thattem-tab-bar-common-items)
 (require 'thattem-tab-bar-advices)
 
 (defcustom thattem-tab-bar-format-default
-  '(thattem-tab-bar-format-history
+  '(thattem-tab-bar-format-position-helper
+    thattem-tab-bar-format-history
     thattem-tab-bar-format-tabs
     thattem-tab-bar-format-add-tab
     thattem-tab-bar-format-align-right
@@ -47,8 +49,8 @@
   :group 'thattem-tab-bar)
 
 (defcustom thattem-tab-bar-format-modern
-  '(thattem-tab-bar-format-workspaces
-    thattem-tab-bar-format-workspaces--position-helper
+  '(thattem-tab-bar-format-position-helper
+    thattem-tab-bar-format-workspaces
     thattem-tab-bar-format-align-middle
     thattem-tab-bar-format-add-tab
     thattem-tab-bar-format-system-monitor
