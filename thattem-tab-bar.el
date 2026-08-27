@@ -66,6 +66,16 @@
   "Style of tab bar."
   :type '(choice (const thattem-tab-bar-format-default)
                  (const thattem-tab-bar-format-modern))
+  :set (lambda (symbol value)
+         (set-default-toplevel-value symbol value)
+         (cond ((eq value 'thattem-tab-bar-format-default)
+                (setopt tab-bar-new-tab-to 'rightmost)
+                (setopt thattem-tab-bar-tab-name-style
+                        'thattem-tab-bar-long-name))
+               ((eq value 'thattem-tab-bar-format-modern)
+                (setopt tab-bar-new-tab-to 'leftmost)
+                (setopt thattem-tab-bar-tab-name-style
+                        'thattem-tab-bar-short-name))))
   :group 'thattem-tab-bar)
 
 (defvar thattem-tab-bar-mode-map
