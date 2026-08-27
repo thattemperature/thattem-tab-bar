@@ -1,4 +1,4 @@
-;;; Tab-bar-new-items --- define some new tab bar items  -*- lexical-binding: t; -*-
+;;; Tab-bar-special-items --- define special items  -*- lexical-binding: t; -*-
 
 ;; Author: That Temperature <2719023332@qq.com>
 ;; URL: https://github.com/thattemperature/thattem-tab-bar
@@ -18,7 +18,8 @@
 
 ;;; Commentary:
 
-;; Tab-bar-new-items defines some new tab bar items.
+;; Tab-bar-special-items defines some special tab bar items (depending
+;; on thattem-emacs-library).
 
 ;;; Code:
 
@@ -40,7 +41,8 @@
 ;;; Special configurations
 
 (defcustom thattem-tab-bar-timer-frequency 10
-  "Timer update frequency that used in new items in thattem-tab-bar."
+  "Timer update frequency that used in special items in \
+thattem-tab-bar."
   :type 'integer
   :group 'thattem-tab-bar)
 
@@ -306,5 +308,5 @@ that item will be shown with different face."
       ignore :help ""))))
 
 
-(provide 'thattem-tab-bar-new-items)
-;;; thattem-tab-bar-new-items.el ends here
+(provide 'thattem-tab-bar-special-items)
+;;; thattem-tab-bar-special-items.el ends here

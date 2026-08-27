@@ -18,12 +18,12 @@
 
 ;;; Commentary:
 
-;; Tab-bar-new-items defines every advice functions to existing functions.
+;; Tab-bar-advices defines every advice to existing functions.
 ;; Also defines functions used for keybinding.
 
 ;;; Code:
 
-(require 'thattem-tab-bar-new-items)
+(require 'thattem-tab-bar-special-items)
 
 ;;; Advices
 
