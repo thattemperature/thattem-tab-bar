@@ -54,6 +54,7 @@
     thattem-tab-bar-format-align-middle
     thattem-tab-bar-format-add-tab
     thattem-tab-bar-format-system-monitor
+    thattem-tab-bar-format-history
     thattem-tab-bar-format-tabs
     thattem-tab-bar-format-align-right
     thattem-tab-bar-format-global)
