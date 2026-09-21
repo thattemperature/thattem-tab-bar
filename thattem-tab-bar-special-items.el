@@ -31,7 +31,9 @@
 
 (eval-and-compile
   (defcustom thattem-tab-bar-thattem-library-path
-    "/usr/local/lib/libthattem_emacs_library.so"
+    (expand-file-name
+     "libthattem_emacs_library.so"
+     (file-name-directory (locate-library "thattem-tab-bar")))
     "The path of thattem-emacs-library."
     :type 'string
     :group 'thattem-tab-bar)
