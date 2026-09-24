@@ -223,7 +223,7 @@ TAB is the tab item and I is the index."
 (defun thattem-tab-bar-format-align-middle ()
   "Align the rest of tab bar items to the middle.
 
-It will keep items after \\='thattem-tab-bar-format-align-right\\='
+It will keep items after `thattem-tab-bar-format-align-right'
 align to the right.  And if the \"right part\" is long, the
 \"middle part\" will be pushed to the left."
   (let* ((symbol 'thattem-tab-bar-format-align-middle)

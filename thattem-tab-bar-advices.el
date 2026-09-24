@@ -29,7 +29,7 @@
 
 (defun thattem-tab-bar-switch-workspace-by-mouse (&optional event)
   "Switch to workspace.
-Target workspace id is specified by the property \\='id\\='
+Target workspace id is specified by the property `id'
 of the string under the EVENT."
   (interactive "e")
   (let* ((event-start (event-start event))
@@ -39,7 +39,7 @@ of the string under the EVENT."
     (when id (thattem-workspace-switch id))))
 
 (defun thattem-tab-bar--advice-around--tab-bar-mouse-1 (func event)
-  "Add workspace switch function to \\='tab-bar-mouse-1\\='.
+  "Add workspace switch function to `tab-bar-mouse-1'.
 FUNC is the original function and EVENT is its parameter."
   (let* ((event-start (event-start event))
          (posn-string (posn-string event-start))
@@ -55,7 +55,7 @@ FUNC is the original function and EVENT is its parameter."
 (defun thattem-tab-bar-deal-mouse-wheel-up (&optional event)
   "Switch to previous workspace, or switch to previous tab.
 Target workspace id is specified by the frame parameter
-\\='previous-workspace-id\\=' under the EVENT."
+`previous-workspace-id' under the EVENT."
   (interactive "e")
   (let* ((event-start (event-start event))
          (x (car (posn-x-y event-start)))
@@ -72,7 +72,7 @@ Target workspace id is specified by the frame parameter
 (defun thattem-tab-bar-deal-mouse-wheel-down (&optional event)
   "Switch to next workspace, or switch to next tab.
 Target workspace id is specified by the frame parameter
-\\='next-workspace-id\\=' under the EVENT."
+`next-workspace-id' under the EVENT."
   (interactive "e")
   (let* ((event-start (event-start event))
          (x (car (posn-x-y event-start)))

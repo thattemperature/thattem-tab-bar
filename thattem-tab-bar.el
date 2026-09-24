@@ -44,7 +44,7 @@
     thattem-tab-bar-format-add-tab
     thattem-tab-bar-format-align-right
     thattem-tab-bar-format-global)
-  "New value for \\='tab-bar-format\\='."
+  "New value for `tab-bar-format'."
   :type '(repeat symbol)
   :group 'thattem-tab-bar)
 
@@ -58,7 +58,7 @@
     thattem-tab-bar-format-tabs
     thattem-tab-bar-format-align-right
     thattem-tab-bar-format-global)
-  "A modern \\='tab-bar-format\\=' replacement."
+  "A modern `tab-bar-format' replacement."
   :type '(repeat symbol)
   :group 'thattem-tab-bar)
 
@@ -88,7 +88,7 @@
     (define-key map [down-mouse-2]
                 #'thattem-tab-bar-deal-down-mouse-2)
     map)
-  "Keymap used by \\='thattem-tab-bar-mode\\='.")
+  "Keymap used by `thattem-tab-bar-mode'.")
 
 (define-minor-mode thattem-tab-bar-mode
   "Toggle thattem tab bar mode."
