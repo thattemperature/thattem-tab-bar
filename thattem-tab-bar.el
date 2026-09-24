@@ -95,24 +95,23 @@
   :global t
 
   (when thattem-tab-bar-mode
-    (advice-add 'tab-bar-mouse-1 :around
-                #'thattem-tab-bar--advice-around--tab-bar-mouse-1)
-    (setq thattem-tab-bar-workspace-timer
-          (run-with-timer
-           0
-           (/ 1.0 thattem-tab-bar-timer-frequency)
-           #'thattem-tab-bar-update-workspace))
-    (setq thattem-tab-bar-system-monitor-timer
-          (run-with-timer
-           0
-           (/ 1.0 thattem-tab-bar-timer-frequency)
-           #'thattem-tab-bar-update-system-monitor)))
+    (unless (advice-member-p
+             #'thattem-tab-bar--advice-around--tab-bar-mouse-1
+             'tab-bar-mouse-1)
+      (advice-add 'tab-bar-mouse-1 :around
+                  #'thattem-tab-bar--advice-around--tab-bar-mouse-1))
+    (thattem-tab-bar-start-timer
+     thattem-tab-bar-workspace-timer)
+    (thattem-tab-bar-start-timer
+     thattem-tab-bar-system-monitor-timer))
 
   (unless thattem-tab-bar-mode
     (advice-remove 'tab-bar-mouse-1
                    #'thattem-tab-bar--advice-around--tab-bar-mouse-1)
-    (cancel-timer thattem-tab-bar-workspace-timer)
-    (cancel-timer thattem-tab-bar-system-monitor-timer))
+    (thattem-tab-bar-stop-timer
+     thattem-tab-bar-workspace-timer)
+    (thattem-tab-bar-stop-timer
+     thattem-tab-bar-system-monitor-timer))
 
   (when thattem-tab-bar-mode
     (tab-bar-mode)

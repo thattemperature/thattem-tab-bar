@@ -24,6 +24,7 @@
 ;;; Code:
 
 (require 'cl-lib)
+(require 'subr-x)
 (require 'nerd-icons)
 (require 'thattem-tab-bar-faces)
 
@@ -45,8 +46,39 @@
 (defcustom thattem-tab-bar-timer-frequency 10
   "Timer update frequency that used in special items in \
 thattem-tab-bar."
-  :type 'integer
+  :type '(integer
+          :validate
+          (lambda (widget)
+            (unless (> (widget-value widget) 0)
+              (widget-put
+               widget :error
+               "The frequency must positive"))))
   :group 'thattem-tab-bar)
+
+;;; Helper macros
+
+(defmacro thattem-tab-bar-start-timer (timervar)
+  "Run timer and save the handle as TIMERVAR."
+  (let* ((symbol-name (symbol-name timervar))
+         (key (string-remove-prefix
+               "thattem-tab-bar-"
+               (string-remove-suffix
+                "-timer" symbol-name)))
+         (func-name (concat
+                     "thattem-tab-bar-update-" key))
+         (func (intern func-name)))
+    `(unless (timerp ,timervar)
+       (setq ,timervar
+             (run-with-timer
+              0
+              (/ 1.0 thattem-tab-bar-timer-frequency)
+              (function ,func))))))
+
+(defmacro thattem-tab-bar-stop-timer (timervar)
+  "Stop the timer and clear the handle TIMERVAR."
+  `(when (timerp ,timervar)
+     (cancel-timer ,timervar)
+     (setq ,timervar nil)))
 
 ;;; Workspace control
 
